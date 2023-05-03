@@ -1,9 +1,24 @@
 ---
-title: "Corso Introduttivo a R"
+title: "Corso introduttivo a R"
+author: "[Massimo Tranquillo](https://github.com/TMax66)"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+# mail: "yan.holtz.data@gmail.com"
+# linkedin: "yan-holtz-2477534a"
+# twitter: "r_graph_gallery"
+# github: "holtzy"
+home: "www.yan-holtz.com"
+# !!! You need to provide a logo image here !!! Or just delete the field for no logo
+logo: "logo_gallery.png"
 output:
-  html_document:
-    df_print: paged
+  epuRate::epurate:
+    toc: TRUE
+    number_sections: FALSE
+    code_folding: "hide"
 ---
+
+
+<br><br>
+
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(here)
@@ -161,12 +176,13 @@ Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal 
 
 ## 4° Incontro (20 Giugno)
 
-## **Statistica con R**
+**Statistica con R**
 
 
-### **I test statistici comuni sono modelli lineari**
+### **I test statistici sono modelli lineari**
 
-![](images/pic1.png)
+![](pic1.png)
+
 
 ## 4° Incontro (30 Giugno)
 
@@ -174,6 +190,8 @@ Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal 
 
 - reportistica con rmarkdown;
 - controllo versioni e lavoro collaborativo con GIT
+
+
 
 
 
