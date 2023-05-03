@@ -166,7 +166,8 @@ Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal 
 
 ### **I test statistici comuni sono modelli lineari**
 
-![](../images/pic1.png)
+![](images/pic1.png)
+
 ## 4° Incontro (30 Giugno)
 
 **Riproducibilità della ricerca con R**
