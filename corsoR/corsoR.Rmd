@@ -1,0 +1,202 @@
+---
+title: "A clean and uncluttered template"
+author: "[Yan Holtz](https://github.com/holtzy)"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+mail: "yan.holtz.data@gmail.com"
+linkedin: "yan-holtz-2477534a"
+twitter: "r_graph_gallery"
+github: "holtzy"
+home: "www.yan-holtz.com"
+# !!! You need to provide a logo image here !!! Or just delete the field for no logo
+logo: "logo_gallery.png"
+output:
+  epuRate::epurate:
+    toc: TRUE
+    number_sections: FALSE
+    code_folding: "hide"
+---
+
+
+<br><br>
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(here)
+source(here('R', 'librerie.R'))
+```
+
+# Istruzioni iniziali
+
+1.  Scaricare e installare i seguenti applicativi rispettando l'ordine d'installazione:
+
+    a.  R (<https://cran.r-project.org/>)
+
+    b.  Git (<https://git-scm.com/downloads>)
+
+    c.  RStudio (<https://posit.co/download/rstudio-desktop/>)
+
+2.  Creare un account personale su [GitHub] (<https://github.com/>)
+
+3.  Installare i seguenti pacchetti che saranno utilizzati nel corso, copiando e incollando nella consolle di R questa istruzione:
+
+```{r eval=FALSE}
+install.packages("tidyverse", "readxl", "here", "janitor", "openxlsx", "gt", "knit", "rmarkdown")
+
+```
+
+4.  Configurare il file .Rprofile
+
+Usando il seguente comando  *file.edit("~/.Rprofile")* si aprirà il file .Rprofile  in RStudio. Procedere copiando nel file le seguenti istruzioni
+
+
+```{r eval=FALSE}
+library(here)
+
+#funzione che inizializza un progetto
+rproj <- function(){
+  dir.create("R")
+  dir.create("dati")
+  dir.create("report")
+  file.create(here("R", "codiciOF.R"))
+  file.create(here("report", "notebook.rmd"))
+  fileConn<-file(here("report","notebook.rmd"))
+  writeLines(c("---",
+               "title: 'R Notebook'",
+               "output: html_notebook",
+               "---", 
+               "",
+               
+               "```{r}",
+               "source(here('R', 'librerie.R'))",
+               
+               "```",
+
+               "# CAPITOLO",
+               "## Paragrafo",
+  
+               "### Subparagrafo", 
+               
+               "#### Subsubparagrafo"), fileConn)
+  close(fileConn)
+  
+  file.create(here("R", "librerie.R"))
+  fileConn2<-file(here("R","librerie.R"))
+  writeLines(c("library(tidyverse)", 
+               "library(openxlsx)", 
+               "library(readxl)"), fileConn2)
+  close(fileConn2)
+  
+  fileConn3 <- file(here("R", "codiciOF.R"))
+  writeLines(c("source(here('R', 'librerie.R'))"), fileConn3)
+  close(fileConn3)
+  
+}
+
+```
+
+Salvare e chiudere il file .Rprofile
+
+Ora  R è configurato in modo che ogni volta sarà aperto richiamerà la libreria "here" e renderà  disponibile nell'ambiente globale la funzione rproj.R che potrà essere utilizzata per inizializzare nuovi progetti, come descritto nel prossimo paragrafo.
+
+
+6. Creare una cartella in Desktop denominata Rprogetti che ospiterà i progetti di R
+
+## Inizializzare un nuovo progetto
+
+I nuovi progetti vanno inizializzati dapprima nel repository github e poi clonati sul PC locale.
+
+Aprite il sito GitHub e accedete con login e pwd. Cliccate su "New Repository". Proseguite dando un nome al repository seguendo i suggerimenti. Scrivete una piccola descrizione dei contenuti del progetto. Selezionate "Private" per rendere privato il contenuto del repository ( questa scelta influenzerà l'eventuale attività di scrittura collaborativa, ma potrà essere modificata anche in un secondo tempo a seconda delle necessità). Mettete la spunta su ADD a Readme file. Concludete l'operazione cliccando sul pulsante verde "Create repository". 
+
+A questo punto avete creato un contenitore vuoto che ospiterà in seguito i file del progetto di cui volete garantire il controllo delle versioni, il costante aggioranamento e una sicura archivazione nel cloud.
+
+## Clonare il progetto dal repository di GitHub nel PC locale
+
+Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizzo web che dovrebbe avere questa forma:
+**https://github.com/Utente/Progetto**
+Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal menu a tendina File. Scegliete l'opzione Version Control nella finestra di Dialogo dei nuovi progetti e quindi l'opzione Git. Incollate nella barra Repository URL l'indirizzo del repository del progetto precedentemente copiata. Nella barra Project directory name inserite il nome del Progetto e in Create project as subdirectory of: inserite il percorso della cartella Rprogetti presente nel desktop e che avete creato nel passo 6 delle istruzioni sopra. A questo punto cliccate il pulsante Create Project e R procederà a creare un nuova cartella in Rprogetti denominandola con il nome del progetto e all'interno clonerà i file presenti nel repository. Questa operazione si conclude con R che apre RStudio all'interno del nuovo progetto. Nel Pannello in basso a destra sotto la finestra file potrete visionare i file presenti nel progetto. In questa fase nella cartella del progetto non ci sono ancora le cartelle e i file tipici di un progetto R. Quindi eseguite la funzione rproj() semplicemnte scrivendo nella consolle di R l'istruzione rproj(). La funzione creerà nella cartella del progetto le seguenti cartelle:
+
+- R che contiene il file codiciOF.R in cui scrivere i codici di R, il file librerie.R con un elenco delle librerie di base da caricare
+
+- dati vuota, che ospiterà i dati del progetto
+
+- report che contiene il file notebook.rmd già con una configurazione di base per l'utilizzo come documento di reportistica dei risultati
+
+
+
+# Programma del corso
+
+## 1° Incontro (16 Maggio)
+
+**R, RSTUDIO e GIT**
+
+  - Panoramica su R e sulle funzionalità di RSTUDIO e GIT
+  
+  - Project in RStudio
+                       
+  - Pacchetti di R
+                       
+  - Concetti di base di R:  
+  
+        - R base;  
+         
+        - enviroment; 
+        
+        - oggetti;  
+        
+        - vettori; 
+        
+        - liste; 
+        
+        - dataframe;
+        
+        - tipi di dati (character, double, numeric, factor, integer); 
+        
+        - cenni di programmazione funzionale
+
+
+## 2° Incontro (30 Maggio)
+
+**Gestione dei dati (data wrangling)**
+
+  - Introduzione al Tidyverse:
+        
+        - dplyr; 
+        - lubridate;   
+        - ggplot2;
+  
+ - Funzioni principali: 
+ 
+        -select, mutate, filter, rename, recode, arrange, summarise, group_by, pivot_wider,pivot_longer join...       
+
+
+## 3° Incontro (16 Giugno)
+
+**Visualizzazione dei dati con ggplot2**
+
+
+## 4° Incontro (20 Giugno)
+
+## **Statistica con R**
+
+
+### **I test statistici comuni sono modelli lineari**
+
+![](images/pic1.png)
+
+## 4° Incontro (30 Giugno)
+
+**Riproducibilità della ricerca con R**
+
+- reportistica con rmarkdown;
+- controllo versioni e lavoro collaborativo con GIT
+
+
+
+
+
+
+# Conclusion
+***
+Read more about this template [here](https://github.com/holtzy/epuRate).
+
+Learn how to custom your R Markdown document [here](https://holtzy.github.io/Pimp-my-rmd/).
