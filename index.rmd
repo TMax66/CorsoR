@@ -105,15 +105,13 @@ Ora  R è configurato in modo che ogni volta sarà aperto richiamerà la libreri
 
 I nuovi progetti vanno inizializzati dapprima nel repository github e poi clonati sul PC locale.
 
-Aprite il sito GitHub e accedete con login e pwd. Cliccate su "New Repository". Proseguite dando un nome al repository seguendo i suggerimenti. Scrivete una piccola descrizione dei contenuti del progetto. Selezionate "Private" per rendere privato il contenuto del repository ( questa scelta influenzerà l'eventuale attività di scrittura collaborativa, ma potrà essere modificata anche in un secondo tempo a seconda delle necessità). Mettete la spunta su ADD a Readme file. Concludete l'operazione cliccando sul pulsante verde "Create repository". 
+Aprite il sito GitHub e accedete con login e pwd. Cliccate su "New Repository". Proseguite dando un nome al repository seguendo i suggerimenti. Scrivete una piccola descrizione dei contenuti del progetto. Selezionate "Private" per rendere privato il contenuto del repository ( questa scelta influenzerà l'eventuale attività di scrittura collaborativa, ma potrà essere modificata anche in un secondo tempo a seconda delle necessità). Mettete la spunta su "ADD a Readme file". Concludete l'operazione cliccando sul pulsante verde "Create repository". 
 
 A questo punto avete creato un contenitore vuoto che ospiterà in seguito i file del progetto di cui volete garantire il controllo delle versioni, il costante aggioranamento e una sicura archivazione nel cloud.
 
 ## Clonare il progetto dal repository di GitHub nel PC locale
 
-Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizzo web che dovrebbe avere questa forma:
-**https://github.com/Utente/Progetto**
-Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal menu a tendina File. Scegliete l'opzione Version Control nella finestra di Dialogo dei nuovi progetti e quindi l'opzione Git. Incollate nella barra Repository URL l'indirizzo del repository del progetto precedentemente copiata. Nella barra Project directory name inserite il nome del Progetto e in Create project as subdirectory of: inserite il percorso della cartella Rprogetti presente nel desktop e che avete creato nel passo 6 delle istruzioni sopra. A questo punto cliccate il pulsante Create Project e R procederà a creare un nuova cartella in Rprogetti denominandola con il nome del progetto e all'interno clonerà i file presenti nel repository. Questa operazione si conclude con R che apre RStudio all'interno del nuovo progetto. Nel Pannello in basso a destra sotto la finestra file potrete visionare i file presenti nel progetto. In questa fase nella cartella del progetto non ci sono ancora le cartelle e i file tipici di un progetto R. Quindi eseguite la funzione rproj() semplicemnte scrivendo nella consolle di R l'istruzione rproj(). La funzione creerà nella cartella del progetto le seguenti cartelle:
+Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizzo web che dovrebbe avere questa forma: **https://github.com/Utente/Progetto**. Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal menu a tendina File. Scegliete l'opzione Version Control nella finestra di Dialogo dei nuovi progetti e quindi l'opzione Git. Incollate nella barra Repository URL l'indirizzo del repository del progetto precedentemente copiata. Nella barra Project directory name inserite il nome del Progetto e in Create project as subdirectory of: inserite il percorso della cartella Rprogetti presente nel desktop e che avete creato nel passo 6 delle istruzioni sopra. A questo punto cliccate il pulsante Create Project e R procederà a creare un nuova cartella in Rprogetti denominandola con il nome del progetto e all'interno clonerà i file presenti nel repository. Questa operazione si conclude con R che apre RStudio all'interno del nuovo progetto. Nel Pannello in basso a destra sotto la finestra file potrete visionare i file presenti nel progetto. In questa fase nella cartella del progetto non ci sono ancora le cartelle e i file tipici di un progetto R. Quindi eseguite la funzione rproj() semplicemnte scrivendo nella consolle di R l'istruzione rproj(). La funzione creerà nella cartella del progetto le seguenti cartelle:
 
 - R che contiene il file codiciOF.R in cui scrivere i codici di R, il file librerie.R con un elenco delle librerie di base da caricare
 
@@ -127,7 +125,7 @@ Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal 
 
 ## 1° Incontro (16 Maggio)
 
-**R, RSTUDIO e GIT**
+### R, RSTUDIO e GIT
 
   - Panoramica su R e sulle funzionalità di RSTUDIO e GIT
   
@@ -152,46 +150,51 @@ Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal 
         - tipi di dati (character, double, numeric, factor, integer); 
         
         - cenni di programmazione funzionale
+        
+![](RStudio.png)
 
 
 ## 2° Incontro (30 Maggio)
 
-**Gestione dei dati (data wrangling)**
+### Gestione dei dati (data wrangling)
 
   - Introduzione al Tidyverse:
         
         - dplyr; 
         - lubridate;   
         - ggplot2;
+        
+  
   
  - Funzioni principali: 
  
         -select, mutate, filter, rename, recode, arrange, summarise, group_by, pivot_wider,pivot_longer join...       
-
+![](tidy.png)
 
 ## 3° Incontro (16 Giugno)
 
-**Visualizzazione dei dati con ggplot2**
+### Visualizzazione dei dati con ggplot2
 
+![](ggplot2.png)
 
 ## 4° Incontro (20 Giugno)
 
-**Statistica con R**
+### Statistica con R
 
 
-### **I test statistici sono modelli lineari**
+**I test statistici sono modelli lineari**
 
 ![](pic1.png)
 
 
-## 4° Incontro (30 Giugno)
+## 5° Incontro (30 Giugno)
 
-**Riproducibilità della ricerca con R**
+### Riproducibilità della ricerca con R 
 
 - reportistica con rmarkdown;
 - controllo versioni e lavoro collaborativo con GIT
 
 
-
+![](rmark.png)
 
 
