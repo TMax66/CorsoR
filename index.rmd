@@ -1,7 +1,7 @@
 ---
-title: "Corso introduttivo a R"
+title: "Corso introduttivo a R - (prima edizione)"
 author: "[Massimo Tranquillo](https://github.com/TMax66)"
-date: "`r format(Sys.time(), '%d %B %Y')`"
+#date: "`r format(Sys.time(), '%d %B %Y')`"
 # mail: "yan.holtz.data@gmail.com"
 # linkedin: "yan-holtz-2477534a"
 # twitter: "r_graph_gallery"
