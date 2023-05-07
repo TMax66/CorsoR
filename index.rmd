@@ -165,9 +165,6 @@ Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizz
 
 ---
 
-#![](tidypkg.png)
-
----
 
 -   Funzioni principali:
 
