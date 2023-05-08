@@ -38,7 +38,7 @@ source(here('R', 'librerie.R'))
 3.  Installare i seguenti pacchetti che saranno utilizzati nel corso, copiando e incollando nella consolle di R questa istruzione:
 
 ```{r eval=FALSE}
-install.packages("tidyverse", "readxl", "here", "janitor", "openxlsx", "gt", "knit", "rmarkdown")
+install.packages(c("tidyverse", "readxl", "here", "janitor", "openxlsx", "gt", "knit", "rmarkdown"))
 
 ```
 
