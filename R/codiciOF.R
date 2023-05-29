@@ -154,7 +154,10 @@ titanic %>%
 # table2 table3 per pivotting, separate, unite.....
 
 
-
+titanic %>%
+  clean_names() %>% 
+  separate(col = name, into = c("surname", "title", "name"), sep = "[,\\.]") %>% 
+  select(passenger_id, surname:name)
 
 
 
