@@ -1,21 +1,381 @@
-source(here("R", "librerie.R"))
+#source(here("R", "librerie.R"))
 
 
-# # Titanic data (senza crew)----
+#Incontro del 16 Giugno----
+#link utili: https://r-charts.com/ggplot2/; https://r-graph-gallery.com/
+
+## introduzione a ggplot2----
+
+
+
+
+## dati sperimentazione topi----
+
+#importazione-trasfomrazione-visualizzazione
+
+mouse <- read_excel("C:/Users/vito.tranquillo/Desktop/SPERIMENTAZIONE prova132.xlsx", 
+           range = "A2:T22", col_types = c("text", 
+                                           "numeric", "numeric", "numeric", "numeric", 
+                                           "numeric", "numeric", "numeric", 
+                                           "numeric", "numeric", "numeric", 
+                                           "numeric", "numeric", "numeric", 
+                                           "numeric", "numeric", "numeric", 
+                                           "numeric", "skip", "skip"))
+
+
+
+
+dt <- mouse %>% 
+  filter(!row_number() %in% c(1, 3, 7,11,16)) %>% 
+  mutate(...1 = ifelse(is.na(...1), "idmouse", ...1)) %>% 
+  row_to_names(row_number = 1) %>% 
+  pivot_longer(2:18, names_to = "days", values_to = "weight") %>% 
+    mutate(gruppi = ifelse(str_detect(idmouse, "1", ), "A", 
+                                      ifelse(str_detect(idmouse, "2"), "B", 
+                                                        ifelse(str_detect(idmouse, "3"), "C", "Controllo")))) 
+           #days = as.numeric(days)) 
+  
+  
+
+#usiamo ggplot----
+
+## come plottare seire di dati continui singoli cioè le distribuzioni----
+ggplot(dt)+  
+  aes(x= weight)#+ #, y = gruppi)+
+  #geom_jitter( height = 0.2) +
+  #geom_bar()
+  #geom_histogram(bin=....)
+    # geom_rug()+
+    # geom_histogram(aes(y = ..density..), #<- mostra la proporzione di dati in un contenitore ( bin)
+    #               color = "blue", fill="lightgrey")+
+    # 
+    # geom_density()#adjust=1/3 <- per cambiare la forma della curva adattandola alla distriuzione
+
+  #geom_jitter(aes(y = ""))+
+ # stat_summary(aes(y= ""), color= "red", size = 0.8)
+  
+   #geom_boxplot(aes(y= "")) #, color = "navy", fill = "lightblue", width=0.3)+
+   #geom_jitter(aes(y = "")) #, height = 0.2, color = ifelse(dt$weight == max(dt$weight, na.rm = T), "red", 
+                                                         #ifelse(dt$weight == min(dt$weight, na.rm = T),"red","black")),alpha = 0.3)
+   #geom_violin(aes(y = ""), scale = "width")+
+   #geom_jitter(aes(y = ""))
+  #ggforce::geom_sina(aes(y = ""))
+  #geom_hline(yintercept = 1) <- evidenzia come il violin plot deriva dal density curve
+
+
+p1 <- ggplot(dt)+
+  aes(x = days, y = weight)+ #col = gruppi)+
+  geom_point()+
+  geom_line()# aes(group = idmouse))
+
+
+p2 <- ggplot(dt)+
+  aes(x = days, y = weight, col = gruppi)+
+  geom_point()+
+  geom_line( aes(group = idmouse))
+
+
+p3 <- ggplot(dt)+
+  aes(x = days, y = weight, col = gruppi)+
+  geom_point()+
+  geom_line( aes(group = idmouse))+
+  facet_wrap(.~ gruppi)
+
+p4 <- ggplot(dt)+
+  aes(x = days, y = weight, col = gruppi)+
+  geom_point()+
+  geom_line( aes(group = idmouse))+
+  facet_wrap(.~ gruppi)+
+  theme(
+    legend.position = "none"
+  )
+
+p5 <- ggplot(dt)+
+  aes(x = days, y = weight, col = gruppi)+
+  #geom_violin(aes(x = factor(days), y = weight))+
+  geom_line(aes(col = idmouse), alpha = 0.2)+
+  geom_point( alpha = 0.2)+
+  facet_wrap(.~ gruppi, scales = "free")+
+  geom_smooth(se = FALSE, method = "lm")+
+  theme(
+    legend.position = "none"
+  )
+
+
+
+p6 <- ggplot(dt)+
+  aes(x = days, y = weight, col = gruppi)+
+  #geom_violin(aes(x = factor(days), y = weight))+
+  #geom_line(aes(col = idmouse))+
+  geom_point( alpha = 0.2)+
+  #facet_wrap(.~ gruppi, scales = "free")+
+  geom_smooth(se = FALSE, method = "lm")+
+  theme(
+    legend.position = "bottom"
+  )
+
+p7 <- ggplot(dt)+
+  aes(x = days, y = weight, col = gruppi)+
+  #geom_violin(aes(x = factor(days), y = weight))+
+  #geom_line(aes(col = idmouse))+
+  #geom_point( alpha = 0.2)+
+  #facet_wrap(.~ gruppi, scales = "free")+
+  geom_smooth(se = FALSE, method = "lm")+
+  theme(
+    legend.position = "bottom"
+  )
+  
+  
+library(patchwork)
+
+
+((p1+p2+p3)/
+  (p4+p5+p6))| p7
+
+# aggiungere titolo, sottotitolo, didascalia ad un grafico
+
+p8 <- p7+
+  labs(
+       # title = "Effetto della dieta sull'accrescimento nei topi neonati", 
+       # subtitle = "Confronto tra quattro tipi di diete", 
+       # caption = "le linee rappresentano le rette di regressione 
+       # del peso nei giorni di osservazione per i differenti gruppi di dieta", 
+       y = "Weight (gr)", 
+       x = "Days")+
+  xlim(1,max(dt$days))+
+  ylim(0, max(dt$weight))+
+  scale_x_continuous(breaks = c(1:17))+
+  theme_bw()+
+
+# modificare gli elementi del plot
+
+theme(
+  # plot.title = element_text(color = "blue", size = 18), 
+  # plot.subtitle = element_text(size = 14), 
+  # plot.caption = element_text(color = "blue", size = 12), 
+  
+  legend.title = element_blank(), 
+  legend.position = "top", 
+  
+  axis.title.y = element_text(size = 15), 
+  axis.title.x = element_text(size = 15), 
+  
+  axis.text.x = element_text(size = 14),
+  axis.text.y = element_text(size = 14)
+)
+
+
+gruppi <- c( A = "Gruppo A: Dieta ipeproteica", 
+             B = "Gruppo B: Dieta ipoproteica", 
+             C = "Gruppo C: Dieta ipoproteca più integratore",
+             Controllo = "Gruppo di controllo: Dieta normoproteica")
+
+p9 <- ggplot(dt)+
+  aes(x = days, y = weight, col = idmouse)+
+  #geom_violin(aes(group = days))+
+  geom_boxplot(aes(group = days))+
+  geom_line(aes(group = idmouse))+
+  ggforce::geom_sina(aes(group = days))+
+  facet_wrap(.~ gruppi, scales = "free", 
+             labeller = labeller(gruppi = gruppi))
+  
+
+  
+p10 <- p9 +
+  labs(
+       # title = "Effetto della dieta sull'accrescimento nei topi neonati", 
+       # subtitle = "Confronto tra quattro tipi di diete", 
+       # caption = "nei diversi pannelli sono visualizzati,  per ogni giorno di osservazione, il peso dei singoli topi e
+       # il boxplot della distribuzione del peso", 
+       y = "Weight (gr)", 
+       x = "Days")+
+  xlim(1,max(dt$days))+
+  ylim(0, max(dt$weight))+
+  scale_x_continuous(breaks = c(1:17))+
+  theme_bw()+
+  theme(
+    # plot.title = element_text(color = "blue", size = 18), 
+    # plot.subtitle = element_text(size = 14), 
+    # plot.caption = element_text(color = "blue", size = 12), 
+    
+    legend.title = element_blank(), 
+    legend.position = "none", 
+    
+    axis.title.y = element_text(size = 15), 
+    axis.title.x = element_text(size = 15), 
+    
+    axis.text.x = element_text(size = 14),
+    axis.text.y = element_text(size = 14), 
+    
+    strip.text = element_text(color = "blue", 
+                              size = 13)
+    
+  )
+
+  
+
+(p10 + p8) + plot_annotation(title = "Effetto della dieta sull'accrescimento nei topi neonati", 
+                             subtitle = "Confronto tra quattro tipi di diete",
+  
+  tag_levels = "A", 
+  caption = "A: distribuzione del peso dei singoli topi ( dato osservato e boxplot) nei singoli giorni di osservazione.
+  B: le linee rappresentano le rette di regressione del peso nei giorni di osservazione per i differenti gruppi di dieta") & 
+  theme(plot.title = element_text(color = "blue", size = 18), 
+        plot.subtitle = element_text(size = 14), 
+        plot.caption = element_text(color = "blue", size = 12)
+  )
+
+
+## dati fluorescenza cellule----
+library(ggstatsplot)
+
+fluo <- readRDS("fluo.rds")
+ggplot(fluo)+
+  aes(x= fluorescenza,fill = ceppo)+
+  geom_histogram(bins = 50, color = "black")
+
+# ggplot(fluo)+
+#   aes(x = fluorescenza, y = ceppo)+
+#   geom_violin(scale = "width")+
+#   #geom_boxplot()+
+#  # geom_jitter(aes(group = ceppo), size = 0.03, alpha = 0.1)+
+#   geom_sina(alpha = 0.3, size = 0.1)
+
+
+fit <- lm(fluorescenza ~ ceppo, data = fluo)
+
+p1 <- fluo %>% 
+  ggplot()+
+  aes(x=ceppo, y=fluorescenza, col = ceppo)+
+  
+  geom_violin()+
+  ggforce::geom_sina(alpha = 0.03, size = 0.01)+
+ # geom_boxplot(fill="firebrick4", width = 0.4, alpha = 0.6)+labs(x="")+
+  labs(title="sample distribution of fluorescence")
+  #scale_x_discrete(labels = c("Control","Treatment"))+
+  #geom_jitter(alpha=0.01)+
+  #coord_flip()
+
+p2 <- fit %>% tidy(conf.int = TRUE) %>% 
+  filter(term=="ceppoSL1344") %>% 
+  ggplot(aes(term, estimate))+
+  geom_pointrange(aes(ymin = conf.low, ymax = conf.high))+
+  ylim(315,330)+
+  coord_flip()+
+  labs(title="95% C.I. estimate of effect size")+
+  labs(x="", y="")+
+  theme(axis.text.y = element_blank())
+
+
+p1/p2
+
+
+set.seed(123)
+
+ggbetweenstats(
+  data  = fluo,
+  x     = ceppo,
+  y     = fluorescenza,
+  title = "distribution of fluorescence among bacterial strains"
+)
+
+
+
+
+
+
+# # frank harrell plot ----
+# 
+# library(broom)
+# library(patchwork)
+# dt <- read_excel("dati/twogroup.xlsx")
+# 
+# #plot_grid( (df() %>% 
+# fit <- lm(y ~ group, data = dt)
+# 
+# p1 <- dt %>% 
+#   ggplot()+
+#   aes(x=group, y=y)+
+#   geom_boxplot(fill="firebrick4", width = 0.4, alpha = 0.6)+labs(x="")+
+#   labs(title="sample distribution of y")+
+#   #scale_x_discrete(labels = c("Control","Treatment"))+
+#   geom_jitter(alpha=0.5,position=position_jitter(w=0.1,h=0.1))+
+#   coord_flip()
+# 
+# p2 <- fit %>% tidy(conf.int = TRUE) %>% 
+#   filter(term=="groupTreatment") %>% 
+#   ggplot(aes(term, estimate))+
+#   geom_pointrange(aes(ymin = conf.low, ymax = conf.high))+
+#   ylim(-200, 200)+
+#   coord_flip()+
+#   labs(title="95% C.I. estimate of effect size")+
+#   labs(x="", y="")+
+#   theme(axis.text.y = element_blank())
+# 
+# 
+# p1/p2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Incontro del 30 Maggio----
+
+## Titanic data (senza crew)----
 # 
 unzip(here("dati","titanic.zip"), list = TRUE)
 # 
-# dt1 <- read_csv(unzip(here("dati","titanic.zip"), "test.csv"))
-# dt2 <- read_csv(unzip(here("dati","titanic.zip"), "train.csv"))
+dt1 <- read_csv(unzip(here("dati","titanic.zip"), "test.csv"))
+dt2 <- read_csv(unzip(here("dati","titanic.zip"), "train.csv"))
 
-#survtest <- read_csv(unzip(here("dati","titanic.zip"), "gender_submission.csv"))
+survtest <- read_csv(unzip(here("dati","titanic.zip"), "gender_submission.csv"))
 
 # 
-# dt <- dt1 %>% 
-#   left_join(survtest) %>% 
-#   bind_rows(dt2)
+dt <- dt1 %>%
+  left_join(survtest, by = "PassengerId") %>% 
+  bind_rows(dt2)
 # 
-# write.xlsx(dt, here("dati", "titanic.xlsx"))
+
+ write.xlsx(dt, here("dati", "titanic.xlsx"))
+
+ 
+table1
+table2
+table3
+table4a
+table4b
+
+tcasi <- table4a %>% 
+  pivot_longer(cols = 2:3, names_to = "year", values_to = "cases")
+
+tpop <- table4b %>% 
+  pivot_longer(cols = 2:3, names_to = "year", values_to = "population")
+  
+  
+table4a %>% 
+  pivot_longer(cols = 2:3, names_to = "year", values_to = "cases") %>% 
+  left_join(
+    table4b %>% 
+      pivot_longer(cols = 2:3, names_to = "year", values_to = "population")
+  ) %>% 
+  mutate(rate = 1000*cases/population)
+
 
 # Import----
 
@@ -120,9 +480,9 @@ titanic %>%
   
 
 titanic %>% clean_names() %>% 
-  select(cabin, pclass) %>% #, survived) %>%
-  group_by(cabin, pclass) %>% #, survived) %>%
-  count() %>%  View()
+  select(cabin, pclass, survived) %>%
+  group_by(cabin, pclass, survived) %>%
+  count() %>%  
   pivot_wider(names_from = "survived", values_from = "n", values_fill = 0) %>% 
   rename(death = `0`, surv = `1`)
 
@@ -162,7 +522,8 @@ titanic %>%
 
 
 
-#dati cellulle Berni
+#dati cellulle Berni----
+library(vioplot)
 ER1175 <- read_excel("C:/Users/vito.tranquillo/Desktop/dataset esempi per corso/Copia di Esempio Dati_MBerni_AREG.xlsx", 
            col_types = c("date", "numeric", "text", 
                          "numeric", "skip", "skip", "skip", 
@@ -173,32 +534,56 @@ SL1344 <- read_excel("C:/Users/vito.tranquillo/Desktop/dataset esempi per corso/
                                    "skip", "skip", "skip", "skip", "date", 
                                    "numeric", "text", "numeric"))
 dt <- ER1175 %>% 
-  mutate(ceppo = "ER1175") %>% 
+  mutate(ceppo = "ER1175") %>%
   rename(fluorescenza = ER1175) %>% 
-  
   bind_rows(
     SL1344 %>% 
       mutate(ceppo = "SL1344") %>% 
       rename(fluorescenza = SL1344)
   ) %>% 
-  clean_names() %>%
-# mutate(duplicati = ifelse(duplicated(id_singola_cell) == "TRUE", "si", "no")) %>% 
-  na.omit() %>% 
-
-
-
-  group_by(ceppo, rep_tec) %>%
-  summarise(n = n(),
-            media = mean(fluorescenza),
-            sd = sd(fluorescenza))
+  clean_names() %>%  
+  #mutate(duplicati = ifelse(duplicated(id_singola_cell) == "TRUE", "si", "no")) %>% 
+  na.omit() %>% saveRDS("fluo.rds")
+  # group_by(ceppo) %>%
+  # summarise(n = n(),
+  #           media = mean(fluorescenza),
+  #           sd = sd(fluorescenza))
   
-  # ggplot()+
-  # aes(x = fluorescenza, fill = ceppo)+
-  # geom_density(alpha = 0.6)+
-  # scale_fill_manual(values=c("#868E74", "#AD5988"))+
-  #  facet_grid(rep_tec~ rep_bio, scales = "free")
-  # 
+  ggplot(dt)+ theme_bw()+
+  # aes(y = fluorescenza, x = seq(1:nrow(dt)), col = ceppo)+
+    aes(fluorescenza, group = ceppo)+
+    geom_histogram(binwidth = 50,  color = "black", fill = "lightgrey")+
+    facet_wrap(~ ceppo)
+    
+    #geom_jitter(size = 0.1, alpha = 0.3)+
+    #geom_boxplot()+
+   # scale_fill_manual(values=c("#868E74", "#AD5988"))
+  
+  
+  
+  
+  geom_density(alpha = 0.6)+
+  scale_fill_manual(values=c("#868E74", "#AD5988"))+
+   facet_grid(rep_tec~ rep_bio, scales = "free")
 
+
+# con vioplot
+  
+  # vioplot(ER1175$ER1175,
+  #         colMed = "green", # Median with a line
+  #         side = "right",   # Right side
+  #         col = "#5773CC") 
+  # 
+  # vioplot(SL1344$SL1344,
+  #         colMed = "green", # Median with a line
+  #         side = "left",   # Right side
+  #         col = "#FFB900",   # Color for the left side
+  #         add = TRUE)  
+  # legend("topleft",
+  #        legend = c("ER1175", "SL1344"),
+  #        fill = c("#5773CC", "#FFB900"))
+  #   
+  
 # dati who-----
 
 data(who)
@@ -230,13 +615,17 @@ who %>%
     names_to = "key", 
     values_to = "cases", 
     values_drop_na = TRUE
-  ) %>% 
+  ) %>%  
   mutate(
     key = stringr::str_replace(key, "newrel", "new_rel")
-  ) %>%
+  ) %>% 
   separate(key, c("new", "type", "sexage")) %>% 
   select(-new, -iso2, -iso3) %>% 
-  separate(sexage, c("sex", "age"), sep = 1)
+  separate(sexage, c("sex", "age"), sep = 1) %>%
+  group_by(country, year) %>% 
+  summarise(totcasi = sum(cases)) %>% 
+  arrange(year) %>% 
+  pivot_wider(names_from = "year", values_from = "totcasi", values_fill = 0)
 
 #Per ogni paese, anno e sesso calcolare il numero totale di casi di TB.
 
@@ -296,4 +685,12 @@ pat <- dtpat %>%
          stadio = factor(stadio, levels =c("Larvae", "Nymphae",  "Adult"))
   )%>%
   filter(specie == "Ixodes ricinus")
+
+
+# covid----
+
+covid <- read.csv("C:/Users/vito.tranquillo/Desktop/Git Projects/CorsoR/dati/covid.csv")
+
+covid 
+
 
