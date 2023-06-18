@@ -4,6 +4,103 @@
 #Incontro del 16 Giugno----
 #link utili: https://r-charts.com/ggplot2/; https://r-graph-gallery.com/
 
+# esercizi su dati COVID----
+
+
+covid <- read.csv("C:/Users/vito.tranquillo/Desktop/Git Projects/CorsoR/dati/covid.csv")
+
+#carta/bertasio/parisi
+
+#1-
+esamiperanno <- select(covid, Tot_Eseguiti, anno) 
+esamiperanno <- na.omit(esamiperanno) 
+esamiperanno %>%  
+  pivot_wider(names_from = anno, values_from = Tot_Eseguiti, values_fn = sum) 
+
+
+#4--numero di esami eseguiti con la prova SARS-CoV-2: agente eziologico per reparto e anno
+
+esamiperagenteeziologico <- select(covid, Tot_Eseguiti, Reparto, anno, Prova) 
+esamiperagenteeziologicofilt <- filter(esamiperagenteeziologico, Prova == "SARS-CoV-2: agente eziologico") 
+esamiperagenteeziologicofilt <- na.omit(esamiperagenteeziologicofilt) 
+esamiperagenteeziologicofilt %>%  
+  pivot_wider(names_from = Reparto,anno, values_from = Tot_Eseguiti, values_fn =sum) 
+
+
+covid %>% 
+  #filter(Prova == "SARS-CoV-2: agente eziologico") %>% 
+  group_by(Reparto, anno) %>% 
+  summarise(tot = sum(Tot_Eseguiti, na.rm = T))
+
+
+#1-baselli 
+covid_2 = covid %>%
+  select(tot, anno) %>% #<-tot??
+  group_by(anno) %>%
+  summarise(tot = sum(tot, na.rm = TRUE), n = n())
+
+#Iyad
+
+#4--numero di esami eseguiti con la prova SARS-CoV-2: agente eziologico per reparto e anno
+
+covid <-  clean_names(covid)
+covid %>% 
+  group_by("SARS-CoV-2: agente eziologico", anno, reparto) %>% #<----- ??
+  summarise(tot_esami = sum(tot_eseguiti, na.rm = T))
+
+
+#Reggiani
+
+covid <- clean_names(covid)
+names(covid)
+unique(covid$comune)
+NA %in% unique(covid$comune)
+length(unique(covid$comune)) 
+
+covid %>% mutate(materiale = replace(materiale, materiale %in% c("TAMPONE ", "TAMPOE", "TAMPONI"), "TAMPONE"),
+                 materiale = replace(materiale, materiale %in% c("SALIVA ", "SALIVARI"), "SALIVA"),
+                 materiale = replace(materiale, materiale %in% "RNA", "RNA SARS-CoV-2"),
+                 materiale = replace(materiale, materiale %in% "materiale vari", "ALTRI MATERIALI"),
+                 materiale = replace(materiale, materiale %in% "espettorato", "ESPETTORATO")) %>%
+  group_by(materiale) %>% 
+  summarise(esami = sum(tot_eseguiti, na.rm = T)) %>% 
+  mutate(prop= esami/sum(esami))
+  pivot_wider(names_from = "materiale", values_from = "esami")
+
+covid %>% 
+ # mutate(anno = as.character(anno)) %>% 
+  group_by(anno, conferente) %>% 
+  summarise(esami = sum(tot_eseguiti, na.rm=T))%>%
+  pivot_wider(names_from = "anno", values_from = "esami")
+
+
+
+# covid %>% clean_names() %>% 
+#   group_by(anno) %>% 
+#   summarise(totesami = sum(tot_eseguiti, na.rm = T))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## introduzione a ggplot2----
 
 
@@ -32,8 +129,8 @@ dt <- mouse %>%
   pivot_longer(2:18, names_to = "days", values_to = "weight") %>% 
     mutate(gruppi = ifelse(str_detect(idmouse, "1", ), "A", 
                                       ifelse(str_detect(idmouse, "2"), "B", 
-                                                        ifelse(str_detect(idmouse, "3"), "C", "Controllo")))) 
-           #days = as.numeric(days)) 
+                                                        ifelse(str_detect(idmouse, "3"), "C", "Controllo"))), 
+      days = as.numeric(days)) 
   
   
 
@@ -41,21 +138,21 @@ dt <- mouse %>%
 
 ## come plottare seire di dati continui singoli cioè le distribuzioni----
 ggplot(dt)+  
-  aes(x= weight)#+ #, y = gruppi)+
-  #geom_jitter( height = 0.2) +
+  #aes(x= weight)+#+ #, y = gruppi)+
+ # geom_jitter(aes(y = ""), height = 0.2) +
   #geom_bar()
-  #geom_histogram(bin=....)
+ # geom_histogram(bin=....)
     # geom_rug()+
     # geom_histogram(aes(y = ..density..), #<- mostra la proporzione di dati in un contenitore ( bin)
     #               color = "blue", fill="lightgrey")+
-    # 
+    #
     # geom_density()#adjust=1/3 <- per cambiare la forma della curva adattandola alla distriuzione
 
   #geom_jitter(aes(y = ""))+
  # stat_summary(aes(y= ""), color= "red", size = 0.8)
-  
+
    #geom_boxplot(aes(y= "")) #, color = "navy", fill = "lightblue", width=0.3)+
-   #geom_jitter(aes(y = "")) #, height = 0.2, color = ifelse(dt$weight == max(dt$weight, na.rm = T), "red", 
+   #geom_jitter(aes(y = "")) #, height = 0.2, color = ifelse(dt$weight == max(dt$weight, na.rm = T), "red",
                                                          #ifelse(dt$weight == min(dt$weight, na.rm = T),"red","black")),alpha = 0.3)
    #geom_violin(aes(y = ""), scale = "width")+
    #geom_jitter(aes(y = ""))
@@ -176,12 +273,13 @@ p9 <- ggplot(dt)+
   geom_boxplot(aes(group = days))+
   geom_line(aes(group = idmouse))+
   ggforce::geom_sina(aes(group = days))+
-  facet_wrap(.~ gruppi, scales = "free", 
-             labeller = labeller(gruppi = gruppi))
+  facet_wrap(.~ gruppi, scales = "free", labeller = labeller(gruppi = gruppi))
   
 
   
-p10 <- p9 +
+p10 <- 
+  
+  p9 +
   labs(
        # title = "Effetto della dieta sull'accrescimento nei topi neonati", 
        # subtitle = "Confronto tra quattro tipi di diete", 
@@ -227,9 +325,10 @@ p10 <- p9 +
 
 
 ## dati fluorescenza cellule----
+
 library(ggstatsplot)
 
-fluo <- readRDS("fluo.rds")
+fluo <- readRDS(here("dati", "fluo.rds"))
 ggplot(fluo)+
   aes(x= fluorescenza,fill = ceppo)+
   geom_histogram(bins = 50, color = "black")
@@ -278,6 +377,214 @@ ggbetweenstats(
   y     = fluorescenza,
   title = "distribution of fluorescence among bacterial strains"
 )
+
+# grafici per dati categorici ( numerosità / frequenza di diverse categorie)------
+
+#basic barplot
+
+dt <- readRDS(here("dati", "listeria.rds"))
+
+x <- dt %>% mutate(st = paste0("ST",st)) %>%
+  filter(!is.na(origin)) %>%
+  mutate(origin = str_to_title(origin) ) %>%  
+  group_by(origin) %>%
+  tally()
+
+
+  ggplot(dt)+
+  aes(x = origin)+
+    geom_bar(aes(y = (..count..)/sum(..count..))) 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+dt %>% mutate(st = paste0("ST",st)) %>%
+  filter(!is.na(origin)) %>%
+  mutate(origin = str_to_title(origin) ) %>% 
+  group_by(origin) %>%
+  count() %>%
+  arrange(desc(n)) %>% 
+  ggplot()+
+  aes(x = reorder(origin, +n), y = n)+
+  geom_bar(color="black", stat = "identity", fill = "deepskyblue4", width = 0.5)+
+  
+  coord_flip()+
+  theme_bw()+
+  labs(y = "N. of isolates", x = "Source")
+
+
+
+
+
+# data AMR
+
+
+
+AMR_com%>% 
+  filter(x=="TRUE") %>% 
+  group_by("Gruppo"=Specieagg, SPECIE) %>% 
+  summarise(n=n()) %>% 
+  mutate(prop=round(100*(n/670),  2)) %>% 
+  adorn_totals(where = "row")
+
+
+AMR %>%  
+  group_by(identificazione) %>% 
+  filter(identificazione!="Non identificabile") %>% 
+  tally() %>% arrange(desc(n)) %>% 
+  mutate("prop(%)"=round(100*prop.table(n),2)) %>% 
+  adorn_totals(where = c("row"))
+
+
+ab<-AMR %>% 
+  filter(identificazione!="Non identificabile") %>% 
+  dplyr::select(-15,-18,-19)
+
+ab[,13:19]<-apply(ab[,13:19], 2 , funz)
+
+ab<-ab %>% 
+  mutate(MDR = rowSums(.[13:19]))###antibiogram length###
+ab$R<- ifelse(ab$MDR==0, 0, 1)
+ab$MR<-ifelse(ab$MDR==0, "S", 
+              ifelse(ab$MDR>=1 & ab$MDR<3, "R", "MR"))
+#figura 2-ab length
+ab %>% 
+  drop_na(MDR) %>% 
+  ggplot(aes(x=as.factor(MDR)))+geom_bar(aes(fill=MR))+
+  labs(x="numero di resistenze al panel di antibiotici", 
+       y="numero ceppi")+
+  theme_ipsum_rc()+ theme(legend.title = element_blank())+
+  scale_fill_brewer(labels = c("Ceppi multiresistenti", "Ceppi Resistenti", "Ceppi Suscettibili"), direction = -1)
+
+amr %>% 
+  filter(profilo!="SUSC") %>% 
+  group_by(profilo) %>% 
+  dplyr::summarise(n=n()) %>% 
+  arrange(n) %>% 
+  #top_n(10, n) %>% 
+  mutate(profilo = factor(profilo, unique(profilo))) %>% 
+  #ggplot(aes(x=profilo, y=n))+geom_bar(stat = "identity")+coord_flip()
+  ggplot(aes(x=profilo, y=n, label=n))+
+  geom_segment( aes(x=profilo, xend=profilo, y=0, yend=n), color="grey")+
+  geom_point( aes(x=profilo, y=n), size=8.4, color="steelblue" )+
+  geom_text(color="white", size=4)+
+  coord_flip()+
+  theme_ipsum_rc()+
+  labs(y="n.ceppi",x="")
+
+amr %>% 
+  group_by(Specieagg,profilo) %>% 
+  dplyr::summarise(n=n()) %>% 
+  ggplot( aes(Specieagg,profilo), label=n) + 
+  geom_tile(aes(fill = n)) + 
+  geom_text(aes(label = n), size=4) +
+  scale_fill_gradient(low = "gray", high = "red")+
+  #scale_fill_gradient(low = "lightgrey",high = "steelblue")+
+  scale_x_discrete(expand = c(0, 0)) + theme_ipsum_rc()+
+  scale_y_discrete(expand = c(0, 0)) + labs(x="Gruppo Specie")+
+  theme(legend.position = "bottom",axis.ticks = element_blank(),axis.text.x = element_text(angle = 90, hjust = 1,size=8),axis.text.y = element_text(size=8))
+
+
+
+metares %>% 
+  ggplot( aes(y=mean,ymin=lower, ymax=upper, x=articolo))+
+  geom_point(color="blue", size=2)+geom_linerange(color="blue", size=.8)+
+  coord_flip()+
+  theme_ipsum_rc(axis_title_just = "mc")+
+  facet_wrap(~specie)+
+  labs(x="", y="Prevalenza")
+
+
+
+
+# dati listeria 
+library(RColorBrewer)
+library(stringr)
+
+dt <- readRDS(here("dati", "listeria.RDS"))
+
+#fig.1
+dt %>% mutate(st = paste0("ST",st)) %>%
+  group_by(st, source,lineage) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  
+  ggplot()+
+  aes(x = reorder(st,+n), y = n, fill = source)+
+  geom_bar( color = "black", stat='identity', position = "stack")+
+  facet_wrap(~lineage, ncol = 2, scales = "free", labeller = label_both)+
+  coord_flip()+
+  scale_fill_brewer(direction = +1, palette = "Blues")+
+  theme_bw()+
+  labs(y = "N. of isolates", x = "sequence types (ST)")
+
+#fig.2
+dt %>% mutate(st = paste0("ST",st)) %>%
+  filter(!is.na(origin)) %>%
+  mutate(origin = str_to_title(origin) ) %>% 
+  group_by(origin) %>%
+  count() %>%
+  arrange(desc(n)) %>% 
+  ggplot()+
+  aes(x = reorder(origin, +n), y = n)+
+  geom_bar(color="black", stat = "identity", fill = "deepskyblue4", width = 0.5)+
+  
+  coord_flip()+
+  theme_bw()+
+  labs(y = "N. of isolates", x = "Source")
+
+#fig.3
+
+dt %>% mutate(st = paste0("ST",st)) %>%
+  group_by( serotype,source) %>%
+  count() %>%
+  arrange(n, .by_group = T) %>% 
+  mutate(x = factor(interaction(source,serotype,  drop=TRUE))) -> my_df
+
+
+ggplot(my_df)+
+  aes(x = reorder(x, +n), y = n)+
+  geom_bar(color="black", stat = "identity", fill = "deepskyblue4", width = 0.5)+
+  facet_wrap(~ source, scales = "free")+
+  theme_bw()+
+  coord_flip()+
+  labs(y = "N. of isolates", x = "Serotype")+
+  scale_x_discrete(breaks = my_df$x, labels=gsub("^.*\\.", "", my_df$x))
+
+
+
+
+
+
+
+
+
+### anaplasma
+anap <- read_excel("dati/anaplasma.xlsx")
+
+
+
+
+
+# grafici statistici----
+
+
+
+
+
+
+
 
 
 
