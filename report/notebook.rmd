@@ -1,0 +1,60 @@
+---
+title: "Anaplasma"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r}
+source(here('R', 'librerie.R'))
+library(flextable)
+library(binom)
+
+dt <- read_excel(here("dati", "anaplasma.xlsx"))
+
+```
+
+# CAPITOLO
+
+
+```{r}
+
+tabella <- dt %>% 
+  group_by(year, specie, area, esito) %>% 
+  count() %>% 
+  pivot_wider(names_from = esito, values_from = n, values_fill = 0) %>% 
+  mutate(Prevalenza = round(P/N, 2)) %>% 
+  select(-N, -P) %>% 
+  pivot_wider(names_from = year, values_from = Prevalenza)
+
+flextable(tabella)
+
+```
+
+
+```{r}
+tlong <- dt %>% 
+  group_by(year, specie, area, esito) %>% 
+  count() %>% 
+  pivot_wider(names_from = esito, values_from = n, values_fill = 0) %>% 
+  mutate(Esaminati = P+N, 
+    Prevalenza = round(P/Esaminati, 2)) 
+
+
+tlong %>% 
+  bind_cols( 
+binom.confint(tlong$P, tlong$Esaminati, methods = "exact")
+)
+  
+
+
+
+
+
+```
+
+
+
+## Paragrafo
+### Subparagrafo
+#### Subsubparagrafo

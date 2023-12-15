@@ -1,5 +1,5 @@
 ---
-title: "Corso introduttivo a R - (prima edizione)"
+title: "Corso introduttivo a R - (seconda edizione)"
 author: "[Massimo Tranquillo](https://github.com/TMax66)"
 #date: "`r format(Sys.time(), '%d %B %Y')`"
 # mail: "yan.holtz.data@gmail.com"
@@ -55,12 +55,21 @@ si aprirà il file .Rprofile in RStudio. Procedere copiando nel file le seguenti
 ```{r eval=FALSE}
 library(here)
 
+#funzione che carica pacchetti di default
+pkg <- function(){
+  library(tidyverse)
+  library(readxl)
+  library(openxlsx)
+  library(gt)
+  library(janitor)
+}
+
 #funzione che inizializza un progetto
 rproj <- function(){
   dir.create("R")
   dir.create("dati")
   dir.create("report")
-  file.create(here("R", "codiciOF.R"))
+  file.create(here("R", "codici.R"))
   file.create(here("report", "notebook.rmd"))
   fileConn<-file(here("report","notebook.rmd"))
   writeLines(c("---",
@@ -113,7 +122,12 @@ A questo punto avete creato un contenitore vuoto che ospiterà in seguito i file
 
 ## Clonare il progetto dal repository di GitHub nel PC locale
 
-Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizzo web che dovrebbe avere questa forma: [**https://github.com/Utente/Progetto**](https://github.com/Utente/Progetto){.uri}. Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal menu a tendina File. Scegliete l'opzione Version Control nella finestra di Dialogo dei nuovi progetti e quindi l'opzione Git. Incollate nella barra Repository URL l'indirizzo del repository del progetto precedentemente copiata. Nella barra Project directory name inserite il nome del Progetto e in Create project as subdirectory of: inserite il percorso della cartella Rprogetti presente nel desktop e che avete creato nel passo 6 delle istruzioni sopra. A questo punto cliccate il pulsante Create Project e R procederà a creare un nuova cartella in Rprogetti denominandola con il nome del progetto e all'interno clonerà i file presenti nel repository. Questa operazione si conclude con R che apre RStudio all'interno del nuovo progetto. Nel Pannello in basso a destra sotto la finestra file potrete visionare i file presenti nel progetto. In questa fase nella cartella del progetto non ci sono ancora le cartelle e i file tipici di un progetto R. Quindi eseguite la funzione rproj() semplicemnte scrivendo nella consolle di R l'istruzione rproj(). La funzione creerà nella cartella del progetto le seguenti cartelle:
+Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizzo web che dovrebbe avere questa forma: https://github.com/Utente/Progetto.
+
+
+<!-- [**https://github.com/Utente/Progetto**](https://github.com/Utente/Progetto){.uri}.  -->
+
+Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal menu a tendina File. Scegliete l'opzione Version Control nella finestra di Dialogo dei nuovi progetti e quindi l'opzione Git. Incollate nella barra Repository URL l'indirizzo del repository del progetto precedentemente copiata. Nella barra Project directory name inserite il nome del Progetto e in Create project as subdirectory of: inserite il percorso della cartella Rprogetti presente nel desktop e che avete creato nel passo 6 delle istruzioni sopra. A questo punto cliccate il pulsante Create Project e R procederà a creare un nuova cartella in Rprogetti denominandola con il nome del progetto e all'interno clonerà i file presenti nel repository. Questa operazione si conclude con R che apre RStudio all'interno del nuovo progetto. Nel Pannello in basso a destra sotto la finestra file potrete visionare i file presenti nel progetto. In questa fase nella cartella del progetto non ci sono ancora le cartelle e i file tipici di un progetto R. Quindi eseguite la funzione rproj() semplicemnte scrivendo nella consolle di R l'istruzione rproj(). La funzione creerà nella cartella del progetto le seguenti cartelle:
 
 -   R che contiene il file codiciOF.R in cui scrivere i codici di R, il file librerie.R con un elenco delle librerie di base da caricare
 
@@ -123,7 +137,7 @@ Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizz
 
 # Programma del corso
 
-## 1° Incontro (16 Maggio)
+## 1° Incontro  
 
 ### R, RSTUDIO e GIT
  
@@ -154,499 +168,496 @@ Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizz
         - cenni di programmazione funzionale
 
 
-![](RStudio.png) 
-E' stata presentata una rapida panoramica sulle principali funzionalità di RStudio come ambiente di sviluppo con particolare attenzione al concetto di Project.
+![](figure/RStudio.png) 
+<!-- E' stata presentata una rapida panoramica sulle principali funzionalità di RStudio come ambiente di sviluppo con particolare attenzione al concetto di Project. -->
 
-# Cosa è R?
+<!-- # Cosa è R? -->
 
-Derivato da S, sviluppato ai laboratori Bell dal finire degli anni ‘70, R è un linguaggio particolarmente pensato per l’analisi statistica, la simulazione e la rappresentazione grafica dei dati.
-È un sistema flessibile, che può essere adattato a produrre esattamente l’analisi voluta, che mette a disposizione strumenti analitici moderni.
-Possiede, fra l’altro:
+<!-- Derivato da S, sviluppato ai laboratori Bell dal finire degli anni ‘70, R è un linguaggio particolarmente pensato per l’analisi statistica, la simulazione e la rappresentazione grafica dei dati. -->
+<!-- È un sistema flessibile, che può essere adattato a produrre esattamente l’analisi voluta, che mette a disposizione strumenti analitici moderni. -->
+<!-- Possiede, fra l’altro: -->
 
-•	Strumenti per la manipolazione e l’archiviazione dei dati
-•	Una collezione estesa, coerente ed estensibile di strumenti analitici
-•	Strumenti grafici per l’analisi e la rappresentazione dei dati
-•	È un linguaggio di programmazione semplice ma potente (gran parte di R è scritta in R stesso)
+<!-- •	Strumenti per la manipolazione e l’archiviazione dei dati -->
+<!-- •	Una collezione estesa, coerente ed estensibile di strumenti analitici -->
+<!-- •	Strumenti grafici per l’analisi e la rappresentazione dei dati -->
+<!-- •	È un linguaggio di programmazione semplice ma potente (gran parte di R è scritta in R stesso) -->
 
 
-R è spesso descritto come un ambiente  per lavorare con i dati: questo è in contrasto con l’idea di software, che identifica invece una raccolta di strumenti specifici.
-R non è strettamente un sistema statistico ma dispone di molte  procedure statistiche, classiche e moderne, come parte di un sistema di strumenti più ampio. Questa è una importante differenza fra R e altri  sistemi statistici. In R una analisi statistica è normalmente eseguita come sequenza di passi intermedi, i cui risultati sono racchiusi in oggetti. Sistemi come SPSS o SAS forniscono outcomes copiosi da (per esempio) una analisi di regressione, mentre l’output di R è in genere minimale ed i risultati dell’analisi vengono invece ritenuti in oggetti accessibili ad ulteriori analisi, interrogazioni,  manipolazioni o rappresentazioni grafiche. Questo significa che R può essere adattato a produrre esattamente l’analisi ed i risultati che uno desidera invece di produrre una analisi pre-confezionata per tutte le situazioni.
+<!-- R è spesso descritto come un ambiente  per lavorare con i dati: questo è in contrasto con l’idea di software, che identifica invece una raccolta di strumenti specifici. -->
+<!-- R non è strettamente un sistema statistico ma dispone di molte  procedure statistiche, classiche e moderne, come parte di un sistema di strumenti più ampio. Questa è una importante differenza fra R e altri  sistemi statistici. In R una analisi statistica è normalmente eseguita come sequenza di passi intermedi, i cui risultati sono racchiusi in oggetti. Sistemi come SPSS o SAS forniscono outcomes copiosi da (per esempio) una analisi di regressione, mentre l’output di R è in genere minimale ed i risultati dell’analisi vengono invece ritenuti in oggetti accessibili ad ulteriori analisi, interrogazioni,  manipolazioni o rappresentazioni grafiche. Questo significa che R può essere adattato a produrre esattamente l’analisi ed i risultati che uno desidera invece di produrre una analisi pre-confezionata per tutte le situazioni. -->
 
-R è basato su un linguaggio e questo comporta che tipicamente l’interazione con R  avvenga attraverso la digitazione di istruzioni in una specifica console ( linea di comando) e significa anche che ogni passo della manipolazione e dell'analisi dei dati può essere registrato, editato, perfezionato (se necessario) e fatto ri-correre i seguito.
+<!-- R è basato su un linguaggio e questo comporta che tipicamente l’interazione con R  avvenga attraverso la digitazione di istruzioni in una specifica console ( linea di comando) e significa anche che ogni passo della manipolazione e dell'analisi dei dati può essere registrato, editato, perfezionato (se necessario) e fatto ri-correre i seguito. -->
 
 
-R un sistema ‘open source’ disponibile nei termini di una GPL, il che significa che è gratuito ma vi sono alcune restrizioni sulla sua ridistribuzione (non è di pubblico dominio).
+<!-- R un sistema ‘open source’ disponibile nei termini di una GPL, il che significa che è gratuito ma vi sono alcune restrizioni sulla sua ridistribuzione (non è di pubblico dominio). -->
 
-R è scaricabile via Internet dal sito:
+<!-- R è scaricabile via Internet dal sito: -->
 
-	http://www.r-project.org/
+<!-- 	http://www.r-project.org/ -->
 
-Qui si trovano anche molti manuali e documenti. 
+<!-- Qui si trovano anche molti manuali e documenti.  -->
 
 
 
-**Assegnazione** 
+<!-- **Assegnazione**  -->
 
-Si usa per creare variabili ‘simboliche’ in R o altri oggetti: la variabile è rappresentata dal suo nome. Questo permette di conservare e manipolare gli oggetti: altrimenti i valori vengono ‘stampati e persi’.
+<!-- Si usa per creare variabili ‘simboliche’ in R o altri oggetti: la variabile è rappresentata dal suo nome. Questo permette di conservare e manipolare gli oggetti: altrimenti i valori vengono ‘stampati e persi’. -->
 
-Può esser assegnato ad un oggetto un nome qualsiasi pur che non cominci con un numero. Un nome non può contenere spazi o underscore.  Da evitare sono anche i nomi già usati da R (c, q, t, C, D, F, I, T, …). I nomi sono ‘case sensitive’ (A != a).
+<!-- Può esser assegnato ad un oggetto un nome qualsiasi pur che non cominci con un numero. Un nome non può contenere spazi o underscore.  Da evitare sono anche i nomi già usati da R (c, q, t, C, D, F, I, T, …). I nomi sono ‘case sensitive’ (A != a). -->
 
-Come comando di assegnazione si può anche utilizzare il simbolo di uguaglianza "=". 
+<!-- Come comando di assegnazione si può anche utilizzare il simbolo di uguaglianza "=".  -->
 
-Gli oggetti creati nel corso della sessione o l’intera collezione degli oggetti temporaneamente disponibili nell'ambiente di lavoro (environment) possono essere salvati per, ad esempio, riprendere l’analisi ad una sessione successiva nel formato .RData.
-SI consiglia tuttavia di non procedere al salvataggio automatico dell'ambiente di lavoro. 
+<!-- Gli oggetti creati nel corso della sessione o l’intera collezione degli oggetti temporaneamente disponibili nell'ambiente di lavoro (environment) possono essere salvati per, ad esempio, riprendere l’analisi ad una sessione successiva nel formato .RData. -->
+<!-- SI consiglia tuttavia di non procedere al salvataggio automatico dell'ambiente di lavoro.  -->
 
 
-### Vettori
+<!-- ### Vettori -->
 
-R opera con  strutture di dati a cui viene assegnato un nome. La più semplice di queste strutture è il **vettore**.
-Un vettore è una collezione ordinata di valori (argomenti) dello stesso tipo (numerici, caratteri, logici).  
+<!-- R opera con  strutture di dati a cui viene assegnato un nome. La più semplice di queste strutture è il **vettore**. -->
+<!-- Un vettore è una collezione ordinata di valori (argomenti) dello stesso tipo (numerici, caratteri, logici).   -->
 
-Il modo più semplice di creare un vettore è con la funzione 'c( )',dove c sta per "concatena". 
+<!-- Il modo più semplice di creare un vettore è con la funzione 'c( )',dove c sta per "concatena".  -->
 
-Alcuni esempi: 
+<!-- Alcuni esempi:  -->
 
-*Vettori numerici*
+<!-- *Vettori numerici* -->
 
-```{r, eval=FALSE}
-vect<-c(9, 8, 7, 6, 5, 4, 3, 2,1)
-```
+<!-- ```{r, eval=FALSE} -->
+<!-- vect<-c(9, 8, 7, 6, 5, 4, 3, 2,1) -->
+<!-- ``` -->
 
-*Vettori di caratteri*
+<!-- *Vettori di caratteri* -->
 
-```{r, eval=FALSE}
-vect2<-c("cane", "gatto", "lupo", "tasso")
-```
+<!-- ```{r, eval=FALSE} -->
+<!-- vect2<-c("cane", "gatto", "lupo", "tasso") -->
+<!-- ``` -->
 
-i caratteri vanno sempre scritti in R all'interno di virgolette (") o (')
+<!-- i caratteri vanno sempre scritti in R all'interno di virgolette (") o (') -->
 
 
-*Vettori logici*
+<!-- *Vettori logici* -->
 
-l'oggetto vect costruito sopra contiene numeri  con il seguente comando chiediamo a R di verificare quali di questi numeri sono >5 
+<!-- l'oggetto vect costruito sopra contiene numeri  con il seguente comando chiediamo a R di verificare quali di questi numeri sono >5  -->
 
-```{r eval=FALSE}
-vect > 5
-```
+<!-- ```{r eval=FALSE} -->
+<!-- vect > 5 -->
+<!-- ``` -->
 
-R restituisce come risultato un vettore logico con indicato TRUE quando il valore in vect è >5 e FALSE quando è < o = a 5.
-I vettori logici sono generati da condizioni. 
-Il vettore logico generato dalla verifica della condizione ‘>5’ ha la stessa lunghezza di vect e per ogni elemento di vect viene restituito un valore TRUE se la condizione è verificata e FALSE se la condizione non è verificata.
-Gli operatori logici sono <, >, <=, >=, == (esattamente uguale) e != (disuguale). Inoltre, se A e B sono espressioni logiche, A & B è la loro intersezione (‘and’, ∩), A|B è la loro unione (‘or’, U), !A è la negazione di A (non A).
-I vettori logici possono essere trasformati in vettori numerici. Questo può avvenire attraverso una funzione tipo ‘as.integer(x)’ o in modo automatico, quando vengono applicate funzioni matematiche ad un oggetto di tipo logico. Con la coercizione TRUE viene interpretato come 1 e FALSE come 0.
+<!-- R restituisce come risultato un vettore logico con indicato TRUE quando il valore in vect è >5 e FALSE quando è < o = a 5. -->
+<!-- I vettori logici sono generati da condizioni.  -->
+<!-- Il vettore logico generato dalla verifica della condizione ‘>5’ ha la stessa lunghezza di vect e per ogni elemento di vect viene restituito un valore TRUE se la condizione è verificata e FALSE se la condizione non è verificata. -->
+<!-- Gli operatori logici sono <, >, <=, >=, == (esattamente uguale) e != (disuguale). Inoltre, se A e B sono espressioni logiche, A & B è la loro intersezione (‘and’, ∩), A|B è la loro unione (‘or’, U), !A è la negazione di A (non A). -->
+<!-- I vettori logici possono essere trasformati in vettori numerici. Questo può avvenire attraverso una funzione tipo ‘as.integer(x)’ o in modo automatico, quando vengono applicate funzioni matematiche ad un oggetto di tipo logico. Con la coercizione TRUE viene interpretato come 1 e FALSE come 0. -->
 
-```{r eval=FALSE}
-y <- rnorm(20, mean=50, sd=20)
-y < 20
-sum(y < 20) # quanti elementi in y sono più piccoli di 20?
-```
+<!-- ```{r eval=FALSE} -->
+<!-- y <- rnorm(20, mean=50, sd=20) -->
+<!-- y < 20 -->
+<!-- sum(y < 20) # quanti elementi in y sono più piccoli di 20? -->
+<!-- ``` -->
 
 
-Su vettori numerici si possono eseguire tutti i tipi di operazioni matematiche. Ad esempio: 
+<!-- Su vettori numerici si possono eseguire tutti i tipi di operazioni matematiche. Ad esempio:  -->
 
-```{r eval=FALSE}
+<!-- ```{r eval=FALSE} -->
 
-sample<-c(475,550,380,610,490)
-positivi<-c(276,314,232,365,304)
-prevalenza <-100*positivi/sample
+<!-- sample<-c(475,550,380,610,490) -->
+<!-- positivi<-c(276,314,232,365,304) -->
+<!-- prevalenza <-100*positivi/sample -->
 
-```
+<!-- ``` -->
 
-Si noti che l’operazione è fatta per ogni elemento dei vettori sample e positivi rispettando la sequenza per ottenere un nuovo 
-vettore ( prevalenza); questa particolaritàù del calcolo di R è detta  "vettorizzazione", e permette di evitare i classici cicli for che si utilizzano normalmente nei linguaggi di programmazione quando è necessario reiterare la stessa procedura variando uno o più elementi.
+<!-- Si noti che l’operazione è fatta per ogni elemento dei vettori sample e positivi rispettando la sequenza per ottenere un nuovo  -->
+<!-- vettore ( prevalenza); questa particolaritàù del calcolo di R è detta  "vettorizzazione", e permette di evitare i classici cicli for che si utilizzano normalmente nei linguaggi di programmazione quando è necessario reiterare la stessa procedura variando uno o più elementi. -->
 
 
-Calcoliamo la media,  utilizzando un vettore costurito tramite la funzione rnorm() che genera un vettore di numeri casuali che si distribuiscono con una distribuzione normale.
+<!-- Calcoliamo la media,  utilizzando un vettore costurito tramite la funzione rnorm() che genera un vettore di numeri casuali che si distribuiscono con una distribuzione normale. -->
 
-1. generiamo il vettore
+<!-- 1. generiamo il vettore -->
 
-```{r eval=FALSE}
-dati <- rnorm(100, 10, 2) # questa istruzione dice a R di generare 100 numeri estratti a caso 
-#da una distribuzione con media = 10 e dev st = 2 e di salvare il risultato nell'environment in un vettore di nome dati
+<!-- ```{r eval=FALSE} -->
+<!-- dati <- rnorm(100, 10, 2) # questa istruzione dice a R di generare 100 numeri estratti a caso  -->
+<!-- #da una distribuzione con media = 10 e dev st = 2 e di salvare il risultato nell'environment in un vettore di nome dati -->
 
-length(dati) # questa istruzione dice a R di calcolare quanti valori ci sono nel vettore dati (lunghezza del vettore dati)
-sum(dati) # questa istruzione dice a R di sommare tutti i valori presenti nel vettore dati
+<!-- length(dati) # questa istruzione dice a R di calcolare quanti valori ci sono nel vettore dati (lunghezza del vettore dati) -->
+<!-- sum(dati) # questa istruzione dice a R di sommare tutti i valori presenti nel vettore dati -->
 
-# le istruzioni date sopra produce dei risultati che sono volatili,
-#non sono salvate nell'ambiente. Per fare la media data da somma/N,
-#possiamo procedere sia salvando i due oggetti sopra assegnandogli 
-#un nome sia inserendo direttamente la formula, in questo caso avremo: 
+<!-- # le istruzioni date sopra produce dei risultati che sono volatili, -->
+<!-- #non sono salvate nell'ambiente. Per fare la media data da somma/N, -->
+<!-- #possiamo procedere sia salvando i due oggetti sopra assegnandogli  -->
+<!-- #un nome sia inserendo direttamente la formula, in questo caso avremo:  -->
 
-sum(dati)/length(dati)
+<!-- sum(dati)/length(dati) -->
 
-# R esegue il comando è restitutisce il risultato. In base alle nostre necessità 
-#possiamo decidere di salvarlo o meno tramite l'assegnazione di un nome. 
+<!-- # R esegue il comando è restitutisce il risultato. In base alle nostre necessità  -->
+<!-- #possiamo decidere di salvarlo o meno tramite l'assegnazione di un nome.  -->
 
-media <- sum(dati)/length(dati)
+<!-- media <- sum(dati)/length(dati) -->
 
 
 
-```
+<!-- ``` -->
 
-sum() e length() sono *funzioni*. Le funzioni sono chiamate attraverso un nome ed operano sugli ‘argomenti’, che vengono scritti fra le parentesi.
+<!-- sum() e length() sono *funzioni*. Le funzioni sono chiamate attraverso un nome ed operano sugli ‘argomenti’, che vengono scritti fra le parentesi. -->
 
-R base è fornito di tutte le funzioni matematiche e statistiche di base, quindi ad esempio la media calcolata sopra può essere semplicemente ottenuta usando la funzione mean(): 
+<!-- R base è fornito di tutte le funzioni matematiche e statistiche di base, quindi ad esempio la media calcolata sopra può essere semplicemente ottenuta usando la funzione mean():  -->
 
-```{r, eval=FALSE}
-mean(dati)
+<!-- ```{r, eval=FALSE} -->
+<!-- mean(dati) -->
 
-```
+<!-- ``` -->
 
-###  Dati mancanti----
+<!-- ###  Dati mancanti---- -->
 
-Spesso un dato puntuale non è disponibile (un campione smarrito, …) . In R un valore speciale identifica i dati mancanti: NA (‘not available’). Da notare che operazioni fatte su NA ritornano NA:
+<!-- Spesso un dato puntuale non è disponibile (un campione smarrito, …) . In R un valore speciale identifica i dati mancanti: NA (‘not available’). Da notare che operazioni fatte su NA ritornano NA: -->
 
-```{r eval=FALSE}
-Y <- c(7, 4, 3, 6, 5, NA, 9)
- 
-mean(Y) # non è possibile fare la media di un vettore in cui è presente uno o più dati mancanti
- 
-mean(Y, na.rm = T) # aggiungendo l'argomento na.rm = T, R prima di calcolare la media rimuove il dato mancante
+<!-- ```{r eval=FALSE} -->
+<!-- Y <- c(7, 4, 3, 6, 5, NA, 9) -->
 
-```
+<!-- mean(Y) # non è possibile fare la media di un vettore in cui è presente uno o più dati mancanti -->
 
-Quando il risultato di una operazione non è definibile R restituisce il valore NaN
-```{r eval=FALSE}
+<!-- mean(Y, na.rm = T) # aggiungendo l'argomento na.rm = T, R prima di calcolare la media rimuove il dato mancante -->
 
-0/0
+<!-- ``` -->
 
-```
+<!-- Quando il risultato di una operazione non è definibile R restituisce il valore NaN -->
+<!-- ```{r eval=FALSE} -->
 
- 
-### Indici; manipolazione e selezione dati-----
+<!-- 0/0 -->
 
+<!-- ``` -->
 
-<!-- La selezione di elementi da un vettore può avvenire aggiungendo al nome del vettore un vettore di indici. Questo vettore di indici può essere: -->
 
-<!-- Un vettore logico: in questo caso il vettore deve essere della stessa lunghezza del vettore  dal quale estrarre gli elementi. I valori corrispondenti a TRUE sono selezionati e quelli corrispondenti a FALSE sono omessi. Per esempio: -->
+<!-- ### Indici; manipolazione e selezione dati----- -->
 
-<!-- > Y -->
-<!-- [1]   7   4   3   6   5  NA   9 NaN -->
 
-<!-- > X <- Y[!is.na(Y)] -->
-<!-- > X -->
-<!-- [1] 7 4 3 6 5 9 -->
+<!-- <!-- La selezione di elementi da un vettore può avvenire aggiungendo al nome del vettore un vettore di indici. Questo vettore di indici può essere: --> -->
 
-<!-- > Y[!is.na(Y) & Y > 5] -->
-<!--  [1] 7 6 9 -->
+<!-- <!-- Un vettore logico: in questo caso il vettore deve essere della stessa lunghezza del vettore  dal quale estrarre gli elementi. I valori corrispondenti a TRUE sono selezionati e quelli corrispondenti a FALSE sono omessi. Per esempio: --> -->
 
+<!-- <!-- > Y --> -->
+<!-- <!-- [1]   7   4   3   6   5  NA   9 NaN --> -->
 
-<!-- 	Un vettore di interi positivi che indicano la posizione nel vettore da cui selezionare dei valori da estrarre -->
+<!-- <!-- > X <- Y[!is.na(Y)] --> -->
+<!-- <!-- > X --> -->
+<!-- <!-- [1] 7 4 3 6 5 9 --> -->
 
-<!-- > Y -->
-<!-- [1]   7   4   3   6   5  NA   9 NaN -->
-<!-- > Y[1:3] -->
-<!-- [1] 7 4 3 -->
-<!-- > Y[c(1, 3, 7)] -->
-<!-- [1] 7 3 9 -->
+<!-- <!-- > Y[!is.na(Y) & Y > 5] --> -->
+<!-- <!--  [1] 7 6 9 --> -->
 
-<!-- •	Un vettore di interi negativi che indicano la posizione nel vettore da cui omettere  dei valori da estrarre -->
 
-<!-- > Y -->
-<!-- [1]   7   4   3   6   5  NA   9 NaN -->
-<!-- > Y[-(1:3)]# estrae tutti i valori meno i primi 3 -->
-<!-- [1]   6   5  NA   9 NaN -->
+<!-- <!-- 	Un vettore di interi positivi che indicano la posizione nel vettore da cui selezionare dei valori da estrarre --> -->
 
-<!-- •	Un vettore di caratteri. Questi rappresentano nomi che sono attributi del vettore -->
+<!-- <!-- > Y --> -->
+<!-- <!-- [1]   7   4   3   6   5  NA   9 NaN --> -->
+<!-- <!-- > Y[1:3] --> -->
+<!-- <!-- [1] 7 4 3 --> -->
+<!-- <!-- > Y[c(1, 3, 7)] --> -->
+<!-- <!-- [1] 7 3 9 --> -->
 
+<!-- <!-- •	Un vettore di interi negativi che indicano la posizione nel vettore da cui omettere  dei valori da estrarre --> -->
 
-<!-- > A<-1:3 -->
-<!-- > trio<-c(‘Aldo’, ‘Giovanni’, ‘Giacomo’) -->
-<!-- > names(A)<-trio -->
-<!-- > A -->
-<!--     Aldo Giovanni  Giacomo  -->
-<!--        1        2        3  -->
-<!-- > attributes(A) -->
-<!-- $names -->
-<!-- [1] ‘Aldo’     ‘Giovanni’ ‘Giacomo’  -->
+<!-- <!-- > Y --> -->
+<!-- <!-- [1]   7   4   3   6   5  NA   9 NaN --> -->
+<!-- <!-- > Y[-(1:3)]# estrae tutti i valori meno i primi 3 --> -->
+<!-- <!-- [1]   6   5  NA   9 NaN --> -->
 
+<!-- <!-- •	Un vettore di caratteri. Questi rappresentano nomi che sono attributi del vettore --> -->
 
-<!-- > A[c(‘Aldo’, ‘Giacomo’)] -->
-<!--    Aldo Giacomo  -->
-<!--       1       3 -->
 
-<!-- Un utilizzo della selezione attraverso indici è molto utile e frequente nella manipolazione dei dati. Esempio di sostituzione: -->
+<!-- <!-- > A<-1:3 --> -->
+<!-- <!-- > trio<-c(‘Aldo’, ‘Giovanni’, ‘Giacomo’) --> -->
+<!-- <!-- > names(A)<-trio --> -->
+<!-- <!-- > A --> -->
+<!-- <!--     Aldo Giovanni  Giacomo  --> -->
+<!-- <!--        1        2        3  --> -->
+<!-- <!-- > attributes(A) --> -->
+<!-- <!-- $names --> -->
+<!-- <!-- [1] ‘Aldo’     ‘Giovanni’ ‘Giacomo’  --> -->
 
-<!-- > Y -->
-<!-- [1]   7   4   3   6   5  NA   9 NaN -->
 
-<!-- > Y[is.na(Y)]<-0 -->
-<!-- > Y -->
-<!-- [1] 7 4 3 6 5 0 9 0 -->
+<!-- <!-- > A[c(‘Aldo’, ‘Giacomo’)] --> -->
+<!-- <!--    Aldo Giacomo  --> -->
+<!-- <!--       1       3 --> -->
 
+<!-- <!-- Un utilizzo della selezione attraverso indici è molto utile e frequente nella manipolazione dei dati. Esempio di sostituzione: --> -->
 
-<!-- Altri tipi di oggetti: -->
+<!-- <!-- > Y --> -->
+<!-- <!-- [1]   7   4   3   6   5  NA   9 NaN --> -->
 
-<!-- I vettori sono il tipo più importante di oggetti di R ma esistono anche oggetti di tipo: -->
+<!-- <!-- > Y[is.na(Y)]<-0 --> -->
+<!-- <!-- > Y --> -->
+<!-- <!-- [1] 7 4 3 6 5 0 9 0 --> -->
 
-<!-- Matrici -->
-<!-- Matrici ed arrays sono generalizzazioni multidimensionali di vettori. Infatti sono vettori con l’attributo ‘dimensione’. Attraverso le dimensioni possono essere indicizzati.  -->
 
-<!-- Fattori -->
-<!-- Sono un modo compatto di rappresentare i dati categorici. Hanno attributo ‘levels’. -->
+<!-- <!-- Altri tipi di oggetti: --> -->
 
-<!-- Liste -->
-<!-- Sono una forma di vettore più generale nella quali i vari elementi possono non essere dello stesso tipo possono anche essere loro stessi vettori o liste. Sono particolarmente utili per raccogliere l’output di analisi statistiche. -->
+<!-- <!-- I vettori sono il tipo più importante di oggetti di R ma esistono anche oggetti di tipo: --> -->
 
-<!-- Data.frames -->
-<!-- Strutture simili alle matrici, con una riga per unità di osservazione, nella quale le colonne possono essere sia numeriche che categoriche. Gran parte dei dati sperimentali o osservazionali vengono raccolti in strutture di questo tipo. -->
+<!-- <!-- Matrici --> -->
+<!-- <!-- Matrici ed arrays sono generalizzazioni multidimensionali di vettori. Infatti sono vettori con l’attributo ‘dimensione’. Attraverso le dimensioni possono essere indicizzati.  --> -->
 
-<!-- Funzioni -->
-<!-- In R anche le funzioni sono oggetti. Questo permette facilmente  la loro manipolazione ed anche la loro creazione. -->
+<!-- <!-- Fattori --> -->
+<!-- <!-- Sono un modo compatto di rappresentare i dati categorici. Hanno attributo ‘levels’. --> -->
 
-<!-- Oggetti: loro modi ed attributi: -->
+<!-- <!-- Liste --> -->
+<!-- <!-- Sono una forma di vettore più generale nella quali i vari elementi possono non essere dello stesso tipo possono anche essere loro stessi vettori o liste. Sono particolarmente utili per raccogliere l’output di analisi statistiche. --> -->
 
-<!-- Attributi intrinseci: mode e length -->
+<!-- <!-- Data.frames --> -->
+<!-- <!-- Strutture simili alle matrici, con una riga per unità di osservazione, nella quale le colonne possono essere sia numeriche che categoriche. Gran parte dei dati sperimentali o osservazionali vengono raccolti in strutture di questo tipo. --> -->
 
-<!-- Le entità su cui R opera  sopra sono tecnicamente detti oggetti: ad esempio vettori di valori numerici (reali) o complessi, i vettori logici e dei vettori (di serie) di caratteri. Questi oggetti sono detti ‘atomici’ poiché i loro componenti sono tutto il stesso tipo, o modo, vale a dire ’numeric’, ‘complex’, ‘logical’ e ‘character’ rispettivamente.  -->
-<!-- I valori in un vettore devono essere  tutti dello stesso modo. -->
-<!--  Così tutto il vettore di dati deve essere senza ambiguità logico, numerico, complesso o carattere. L’unica eccezione ammessa a questa regola è il ‘valore’  speciale indicato con ‘Na’ per le quantità non disponibili. Si noti che un vettore può essere vuoto ed ancora avere un modo. Per esempio il vettore vuoto della serie di caratteri è elencato come character(0) ed il vettore numerico vuoto come numeric(0).  -->
-<!-- R inoltre opera su oggetti denominati liste, che sono del modo ‘list’ di. Queste sono sequenze ordinate degli oggetti che individualmente possono essere di tutte di modo  ‘list’. Le liste sono struttute ‘recursive’ piuttosto che strutture atomiche poiché i loro componenti possono essere  liste a loro volta. -->
+<!-- <!-- Funzioni --> -->
+<!-- <!-- In R anche le funzioni sono oggetti. Questo permette facilmente  la loro manipolazione ed anche la loro creazione. --> -->
 
-<!-- Le altre strutture ricorsive sono quelle di modo ‘function’ ed ‘expression’. Le funzioni sono oggetti che fanno parte di  R e possono essere anche definite dall’utente -->
-<!-- Le espressioni saranno esaminate quando parleremo di formule usate per la modellistica in R. Con modo (mode) di un oggetto significhiamo il tipo dei suoi componenti fondamentali. Ciò è un caso speciale ‘di una proprietà di un oggetto. Un’altra proprietà di ogni oggetto è la sua lunghezza (length). Mode(object) e  length(object) possono essere usati per scoprire il modo e la lunghezza di ogni struttura definita. -->
-<!-- Ulteriori proprietà di un oggetto solitamente sono ottenibili con  attributes(object).  Per questo modo e la lunghezza inoltre sono chiamati ‘attributi intrinseci’ di un oggetto. Per esempio: se z è un vettore logico di lunghezza 100, mode(z) ritorna  ‘logical’ e length(z) è 100. R permette i cambiamenti di modo quasi ovunque possa essere considerato ragionevole così, (a, a volte, dove potrebbe non esserlo).  -->
-<!-- Per esempio : -->
+<!-- <!-- Oggetti: loro modi ed attributi: --> -->
 
-<!-- > b<-0:9  -->
+<!-- <!-- Attributi intrinseci: mode e length --> -->
 
-<!-- potremmo coercire  -->
+<!-- <!-- Le entità su cui R opera  sopra sono tecnicamente detti oggetti: ad esempio vettori di valori numerici (reali) o complessi, i vettori logici e dei vettori (di serie) di caratteri. Questi oggetti sono detti ‘atomici’ poiché i loro componenti sono tutto il stesso tipo, o modo, vale a dire ’numeric’, ‘complex’, ‘logical’ e ‘character’ rispettivamente.  --> -->
+<!-- <!-- I valori in un vettore devono essere  tutti dello stesso modo. --> -->
+<!-- <!--  Così tutto il vettore di dati deve essere senza ambiguità logico, numerico, complesso o carattere. L’unica eccezione ammessa a questa regola è il ‘valore’  speciale indicato con ‘Na’ per le quantità non disponibili. Si noti che un vettore può essere vuoto ed ancora avere un modo. Per esempio il vettore vuoto della serie di caratteri è elencato come character(0) ed il vettore numerico vuoto come numeric(0).  --> -->
+<!-- <!-- R inoltre opera su oggetti denominati liste, che sono del modo ‘list’ di. Queste sono sequenze ordinate degli oggetti che individualmente possono essere di tutte di modo  ‘list’. Le liste sono struttute ‘recursive’ piuttosto che strutture atomiche poiché i loro componenti possono essere  liste a loro volta. --> -->
 
-<!-- caratteri < - as.character(b)  -->
+<!-- <!-- Le altre strutture ricorsive sono quelle di modo ‘function’ ed ‘expression’. Le funzioni sono oggetti che fanno parte di  R e possono essere anche definite dall’utente --> -->
+<!-- <!-- Le espressioni saranno esaminate quando parleremo di formule usate per la modellistica in R. Con modo (mode) di un oggetto significhiamo il tipo dei suoi componenti fondamentali. Ciò è un caso speciale ‘di una proprietà di un oggetto. Un’altra proprietà di ogni oggetto è la sua lunghezza (length). Mode(object) e  length(object) possono essere usati per scoprire il modo e la lunghezza di ogni struttura definita. --> -->
+<!-- <!-- Ulteriori proprietà di un oggetto solitamente sono ottenibili con  attributes(object).  Per questo modo e la lunghezza inoltre sono chiamati ‘attributi intrinseci’ di un oggetto. Per esempio: se z è un vettore logico di lunghezza 100, mode(z) ritorna  ‘logical’ e length(z) è 100. R permette i cambiamenti di modo quasi ovunque possa essere considerato ragionevole così, (a, a volte, dove potrebbe non esserlo).  --> -->
+<!-- <!-- Per esempio : --> -->
 
-<!-- dopo di che le cifre diventano il vettore di caratteri c(“0", "1", …, "9"). Un’ulteriore coercizione, cambiamento del modo, ricostruisce ancora il vettore numerico. -->
-<!-- > z<-as.integer(caratteri) -->
+<!-- <!-- > b<-0:9  --> -->
 
-<!-- C’è un’ampia raccolta di funzioni della forma as.qualcosa() per operare la coercizione da un modo ad un altro o per passare all’oggetto un certo altro attributo che non possiede.  -->
+<!-- <!-- potremmo coercire  --> -->
 
-<!-- Cambiare la lunghezza di un oggetto  -->
+<!-- <!-- caratteri < - as.character(b)  --> -->
 
-<!-- Un oggetto ’vuoto’ può ugualmente avere un modo. Per l’esempio  -->
-<!-- > z < -  numeric() -->
-<!-- crea  e un vettore numerico vuoto. Character() crea similmente un vettore vuoto di caratteri e così via. -->
-<!-- Una volta che un oggetto di qualsiasi formato è stato generato, nuovi componenti possono essere aggiunti semplicemente ad esso dandogli un valore di indice fuori della relativa gamma precedente. Così : -->
-<!-- > z[3 ] <- 17  -->
-<!-- ora rendono a e un vettore della lunghezza 3, (i primi due componenti di cui sono a questo punto entrambe Na).  -->
-<!-- Questa registrazione automatica delle lunghezze di un oggetto è usata spesso, per l’esempio nella funzione dello scan() per l’input di dati (vedi ?scan). Per contro troncare un oggetto richiede soltanto un’assegnazione. Quindi se ‘alpha’ è un oggetto di lunghezza 10, allora  -->
-<!-- > alpha <- alpha[2 * 1:5 ] -->
-<!-- rende alpha un oggetto di lunghezza 5, che è costituita solo dai componenti precedenti, attraverso l’indicizzazione. I vecchi indici non sono mantenuti. -->
+<!-- <!-- dopo di che le cifre diventano il vettore di caratteri c(“0", "1", …, "9"). Un’ulteriore coercizione, cambiamento del modo, ricostruisce ancora il vettore numerico. --> -->
+<!-- <!-- > z<-as.integer(caratteri) --> -->
 
+<!-- <!-- C’è un’ampia raccolta di funzioni della forma as.qualcosa() per operare la coercizione da un modo ad un altro o per passare all’oggetto un certo altro attributo che non possiede.  --> -->
 
-<!-- Ottenere, aggiungere e modificare attributi -->
+<!-- <!-- Cambiare la lunghezza di un oggetto  --> -->
 
-<!-- La funzione attributes(object) restituisce una lista di tutti gli attributi non-intrinsechi attualmente definiti per quell’oggetto. Attr(object, nome della funzione) può essere usata per selezionare un attributo specifico. Queste funzioni sono usate raramente, tranne in circostanze piuttosto speciali, quando un certo nuovo attributo è generato per un certo scopo preciso, per esempio per associare un la data di creazione o un operatore ad un oggetto della R. Il concetto, tuttavia, è molto importante. Una certa cura dovrebbe essere usata quando si assegnano o cancellano gli attributi, poiché sono una parte integrante del sistema di oggetti usati da R. Con una assegnazione da sinistra si possono cambiare o aggiungere  nuovi attributi ad un  oggetto. Per l’esempio -->
+<!-- <!-- Un oggetto ’vuoto’ può ugualmente avere un modo. Per l’esempio  --> -->
+<!-- <!-- > z < -  numeric() --> -->
+<!-- <!-- crea  e un vettore numerico vuoto. Character() crea similmente un vettore vuoto di caratteri e così via. --> -->
+<!-- <!-- Una volta che un oggetto di qualsiasi formato è stato generato, nuovi componenti possono essere aggiunti semplicemente ad esso dandogli un valore di indice fuori della relativa gamma precedente. Così : --> -->
+<!-- <!-- > z[3 ] <- 17  --> -->
+<!-- <!-- ora rendono a e un vettore della lunghezza 3, (i primi due componenti di cui sono a questo punto entrambe Na).  --> -->
+<!-- <!-- Questa registrazione automatica delle lunghezze di un oggetto è usata spesso, per l’esempio nella funzione dello scan() per l’input di dati (vedi ?scan). Per contro troncare un oggetto richiede soltanto un’assegnazione. Quindi se ‘alpha’ è un oggetto di lunghezza 10, allora  --> -->
+<!-- <!-- > alpha <- alpha[2 * 1:5 ] --> -->
+<!-- <!-- rende alpha un oggetto di lunghezza 5, che è costituita solo dai componenti precedenti, attraverso l’indicizzazione. I vecchi indici non sono mantenuti. --> -->
 
-<!-- attr(z, ‘dim’) < - c(10,10)  -->
 
-<!-- permette ad R di trattare z come se fosse una tabella 10 x 10.  -->
-<!-- La classe di un oggetto: -->
+<!-- <!-- Ottenere, aggiungere e modificare attributi --> -->
 
-<!-- Un attributo speciale conosciuto come ‘classe’ dell’oggetto è usato per permettere una programmazione orientata agli oggetti in R. Per l’esempio se un oggetto ha classe ‘data.frame’, sarà stampato in un determinato senso, la funzione plot() lo visualizzerà graficamente in un determinato modo ed altre funzioni cosiddette generiche, come summary() agiranno su di esso in modo congruente con la relativa classe. Per rimuovere temporaneamente gli effetti di codice categoria, si utilizza la funzione unclass(). Per esempio se “dati” ha classe ‘data.frame’ allora  -->
+<!-- <!-- La funzione attributes(object) restituisce una lista di tutti gli attributi non-intrinsechi attualmente definiti per quell’oggetto. Attr(object, nome della funzione) può essere usata per selezionare un attributo specifico. Queste funzioni sono usate raramente, tranne in circostanze piuttosto speciali, quando un certo nuovo attributo è generato per un certo scopo preciso, per esempio per associare un la data di creazione o un operatore ad un oggetto della R. Il concetto, tuttavia, è molto importante. Una certa cura dovrebbe essere usata quando si assegnano o cancellano gli attributi, poiché sono una parte integrante del sistema di oggetti usati da R. Con una assegnazione da sinistra si possono cambiare o aggiungere  nuovi attributi ad un  oggetto. Per l’esempio --> -->
 
-<!-- >dati  -->
-<!-- o -->
-<!-- >print(dati) -->
+<!-- <!-- attr(z, ‘dim’) < - c(10,10)  --> -->
 
-<!-- stamperà il contenuto del data.frame “dati” in una forma simile ad una tabella, mentre  -->
+<!-- <!-- permette ad R di trattare z come se fosse una tabella 10 x 10.  --> -->
+<!-- <!-- La classe di un oggetto: --> -->
 
-<!-- >unclass(dati)  -->
+<!-- <!-- Un attributo speciale conosciuto come ‘classe’ dell’oggetto è usato per permettere una programmazione orientata agli oggetti in R. Per l’esempio se un oggetto ha classe ‘data.frame’, sarà stampato in un determinato senso, la funzione plot() lo visualizzerà graficamente in un determinato modo ed altre funzioni cosiddette generiche, come summary() agiranno su di esso in modo congruente con la relativa classe. Per rimuovere temporaneamente gli effetti di codice categoria, si utilizza la funzione unclass(). Per esempio se “dati” ha classe ‘data.frame’ allora  --> -->
 
-<!-- la stamperà come lista ordinaria. -->
+<!-- <!-- >dati  --> -->
+<!-- <!-- o --> -->
+<!-- <!-- >print(dati) --> -->
 
+<!-- <!-- stamperà il contenuto del data.frame “dati” in una forma simile ad una tabella, mentre  --> -->
 
-<!-- Soltanto in situazioni piuttosto speciali di deve utilizzare questa funzione, ma è importante acquisire da subito l’dea di classe e funzione generica  -->
+<!-- <!-- >unclass(dati)  --> -->
 
+<!-- <!-- la stamperà come lista ordinaria. --> -->
 
-<!-- Fattori ordinati e non -->
-<!--  Un fattore è un vettore usato per specificare una classificazione discreta dei componenti di altri vettori della stessa lunghezza. R utilizza sia fattori ordinati che non ordinati.  -->
-<!-- Ad esempio supponiamo  di avere un campione di   -->
 
-<!-- specie<-c("STERILE", "INQUINATO", , "POLIMICROBISMO", "STREPTOCOCCUS SPP" , "STREPTOCOCCUS AGALACTIAE", "STREPTOCOCCUS DYSGALACTIAE", "STREPTOCOCCUS UBERIS", "STAPHILOCOCCUS  AUREUS", "STAPHILOCOCCUS COAGULASI NEG", "PSEUDOMONAS SPP",  -->
-<!-- "AEROMONAS HYDROPHILA", "ACTYNOMICES SPP","ACTYNOMICES PIOGENES", -->
-<!--  "ESCHERICHIA COLI","SALMONELLA SPP",  -->
-<!-- "BACILLUS SPP", "CLOSTRIDIUM SPP", "CAMPYLOBACTER SPP", -->
-<!-- "LISTERIA SPP", "PASTEURELLA SPP", "MICOPLASMA SPP") -->
+<!-- <!-- Soltanto in situazioni piuttosto speciali di deve utilizzare questa funzione, ma è importante acquisire da subito l’dea di classe e funzione generica  --> -->
 
-<!-- > specief<-factor(specie) -->
 
-<!-- > specief -->
-<!--  [1] STERILE                      INQUINATO                    -->
-<!--  [3] POLIMICROBISMO               STREPTOCOCCUS SPP            -->
-<!--  [5] STREPTOCOCCUS AGALACTIAE     STREPTOCOCCUS DYSGALACTIAE   -->
-<!--  [7] STREPTOCOCCUS UBERIS         STAPHILOCOCCUS  AUREUS       -->
-<!--  [9] STAPHILOCOCCUS COAGULASI NEG PSEUDOMONAS SPP              -->
-<!-- [11] AEROMONAS HYDROPHILA         ACTYNOMICES SPP              -->
-<!-- [13] ACTYNOMICES PIOGENES         ESCHERICHIA COLI             -->
-<!-- [15] SALMONELLA SPP               BACILLUS SPP                 -->
-<!-- [17] CLOSTRIDIUM SPP              CAMPYLOBACTER SPP            -->
-<!-- [19] LISTERIA SPP                 PASTEURELLA SPP     -->
-<!-- [21] MICOPLASMA SPP               -->
-<!-- 21 Levels: ACTYNOMICES PIOGENES ACTYNOMICES SPP ... STREPTOCOCCUS UBERIS -->
+<!-- <!-- Fattori ordinati e non --> -->
+<!-- <!--  Un fattore è un vettore usato per specificare una classificazione discreta dei componenti di altri vettori della stessa lunghezza. R utilizza sia fattori ordinati che non ordinati.  --> -->
+<!-- <!-- Ad esempio supponiamo  di avere un campione di   --> -->
 
-<!-- Per trovare i livelli di un fattore, si utilizza la funzione levels() -->
-<!-- > levels(specief) -->
-<!--  [1] "ACTYNOMICES PIOGENES"         "ACTYNOMICES SPP"              -->
-<!--  [3] "AEROMONAS HYDROPHILA"         "BACILLUS SPP"                 -->
-<!--  [5] "CAMPYLOBACTER SPP"            "CLOSTRIDIUM SPP"              -->
-<!--  [7] "ESCHERICHIA COLI"             "INQUINATO"                    -->
-<!--  [9] "LISTERIA SPP"                 "MICOPLASMA SPP"               -->
-<!-- [11] "PASTEURELLA SPP"              "POLIMICROBISMO"               -->
-<!-- [13] "PSEUDOMONAS SPP"              "SALMONELLA SPP"               -->
-<!-- [15] "STAPHILOCOCCUS  AUREUS"       "STAPHILOCOCCUS COAGULASI NEG" -->
-<!-- [17] "STERILE"                      "STREPTOCOCCUS AGALACTIAE"     -->
-<!-- [19] "STREPTOCOCCUS DYSGALACTIAE"   "STREPTOCOCCUS SPP"            -->
-<!-- [21] "STREPTOCOCCUS UBERIS"      -->
+<!-- <!-- specie<-c("STERILE", "INQUINATO", , "POLIMICROBISMO", "STREPTOCOCCUS SPP" , "STREPTOCOCCUS AGALACTIAE", "STREPTOCOCCUS DYSGALACTIAE", "STREPTOCOCCUS UBERIS", "STAPHILOCOCCUS  AUREUS", "STAPHILOCOCCUS COAGULASI NEG", "PSEUDOMONAS SPP",  --> -->
+<!-- <!-- "AEROMONAS HYDROPHILA", "ACTYNOMICES SPP","ACTYNOMICES PIOGENES", --> -->
+<!-- <!--  "ESCHERICHIA COLI","SALMONELLA SPP",  --> -->
+<!-- <!-- "BACILLUS SPP", "CLOSTRIDIUM SPP", "CAMPYLOBACTER SPP", --> -->
+<!-- <!-- "LISTERIA SPP", "PASTEURELLA SPP", "MICOPLASMA SPP") --> -->
 
+<!-- <!-- > specief<-factor(specie) --> -->
 
+<!-- <!-- > specief --> -->
+<!-- <!--  [1] STERILE                      INQUINATO                    --> -->
+<!-- <!--  [3] POLIMICROBISMO               STREPTOCOCCUS SPP            --> -->
+<!-- <!--  [5] STREPTOCOCCUS AGALACTIAE     STREPTOCOCCUS DYSGALACTIAE   --> -->
+<!-- <!--  [7] STREPTOCOCCUS UBERIS         STAPHILOCOCCUS  AUREUS       --> -->
+<!-- <!--  [9] STAPHILOCOCCUS COAGULASI NEG PSEUDOMONAS SPP              --> -->
+<!-- <!-- [11] AEROMONAS HYDROPHILA         ACTYNOMICES SPP              --> -->
+<!-- <!-- [13] ACTYNOMICES PIOGENES         ESCHERICHIA COLI             --> -->
+<!-- <!-- [15] SALMONELLA SPP               BACILLUS SPP                 --> -->
+<!-- <!-- [17] CLOSTRIDIUM SPP              CAMPYLOBACTER SPP            --> -->
+<!-- <!-- [19] LISTERIA SPP                 PASTEURELLA SPP     --> -->
+<!-- <!-- [21] MICOPLASMA SPP               --> -->
+<!-- <!-- 21 Levels: ACTYNOMICES PIOGENES ACTYNOMICES SPP ... STREPTOCOCCUS UBERIS --> -->
 
+<!-- <!-- Per trovare i livelli di un fattore, si utilizza la funzione levels() --> -->
+<!-- <!-- > levels(specief) --> -->
+<!-- <!--  [1] "ACTYNOMICES PIOGENES"         "ACTYNOMICES SPP"              --> -->
+<!-- <!--  [3] "AEROMONAS HYDROPHILA"         "BACILLUS SPP"                 --> -->
+<!-- <!--  [5] "CAMPYLOBACTER SPP"            "CLOSTRIDIUM SPP"              --> -->
+<!-- <!--  [7] "ESCHERICHIA COLI"             "INQUINATO"                    --> -->
+<!-- <!--  [9] "LISTERIA SPP"                 "MICOPLASMA SPP"               --> -->
+<!-- <!-- [11] "PASTEURELLA SPP"              "POLIMICROBISMO"               --> -->
+<!-- <!-- [13] "PSEUDOMONAS SPP"              "SALMONELLA SPP"               --> -->
+<!-- <!-- [15] "STAPHILOCOCCUS  AUREUS"       "STAPHILOCOCCUS COAGULASI NEG" --> -->
+<!-- <!-- [17] "STERILE"                      "STREPTOCOCCUS AGALACTIAE"     --> -->
+<!-- <!-- [19] "STREPTOCOCCUS DYSGALACTIAE"   "STREPTOCOCCUS SPP"            --> -->
+<!-- <!-- [21] "STREPTOCOCCUS UBERIS"      --> -->
 
 
-### **R-base**
 
-![](timeline.png) ![](Rgui.png){width=250px}
 
 
+<!-- ### **R-base** -->
 
-## 2° Incontro (30 Maggio)
+<!-- ![](timeline.png) ![](Rgui.png){width=250px} -->
+
+## 2° Incontro
 
 ## Gestione, manipolazione dei dati (data wrangling)
 
 ### Introduzione al Tidyverse:
 
 
-![](tidy.png)
-Tidyverse è una raccolta di pacchetti open source per il linguaggio di programmazione R introdotto da Hadley Wickham e dal suo team che "condividono una filosofia di progettazione sottostante, una grammatica e strutture di dati"  ordinati o "tidy". 
+![](figure/tidy.png)
+<!-- Tidyverse è una raccolta di pacchetti open source per il linguaggio di programmazione R introdotto da Hadley Wickham e dal suo team che "condividono una filosofia di progettazione sottostante, una grammatica e strutture di dati"  ordinati o "tidy".  -->
 
-Tra principali pacchetti sono: 
+<!-- Tra principali pacchetti sono:  -->
 
-dplyr, ggplot2, tidyr, tibble, readr, forecats, purr, stringr, lubridate
+<!-- dplyr, ggplot2, tidyr, tibble, readr, forecats, purr, stringr, lubridate -->
 
-Il dettaglio dei singoli pacchetti, le funzionalità, le modalità d'uso sono ben descritte al sito di supporto del pacchetto a cui si rimanda (https://www.tidyverse.org/packages/)
+<!-- Il dettaglio dei singoli pacchetti, le funzionalità, le modalità d'uso sono ben descritte al sito di supporto del pacchetto a cui si rimanda (https://www.tidyverse.org/packages/) -->
 
-In questo corso introduttivo e per le attività legate alla manipolazione, pulizia, dei dataset useremo principalmente il pacchetto dplyr e alcune funzioni del pacchetto  lubridate che permette la gestione delle date. 
+<!-- In questo corso introduttivo e per le attività legate alla manipolazione, pulizia, dei dataset useremo principalmente il pacchetto dplyr e alcune funzioni del pacchetto  lubridate che permette la gestione delle date.  -->
 
 
-**Tidy data**
-I dati ordinati sono un modo per descrivere i dati organizzati con una particolare struttura – una struttura rettangolare, in cui ogni variabile ha la propria colonna, e ogni osservazione ha la sua riga ( Wickham 2014 ).
+<!-- **Tidy data** -->
+<!-- I dati ordinati sono un modo per descrivere i dati organizzati con una particolare struttura – una struttura rettangolare, in cui ogni variabile ha la propria colonna, e ogni osservazione ha la sua riga ( Wickham 2014 ). -->
 
 ![](tidydata1.jpg)
-Questa struttura standard di dati ordinati ha portato Hadley Wickham a descriverlo nel modo in cui Leo Tolstoy descrive le famiglie. Leo dice “ Le famiglie felici sono tutte uguali; ogni famiglia infelice è infelice a modo suo ”. Allo stesso modo, Hadley afferma che “ i set di dati ordinati sono tutti uguali, ma ogni set di dati disordinato è a suo modo disordinato ”.
+<!-- Questa struttura standard di dati ordinati ha portato Hadley Wickham a descriverlo nel modo in cui Leo Tolstoy descrive le famiglie. Leo dice “ Le famiglie felici sono tutte uguali; ogni famiglia infelice è infelice a modo suo ”. Allo stesso modo, Hadley afferma che “ i set di dati ordinati sono tutti uguali, ma ogni set di dati disordinato è a suo modo disordinato ”. -->
 
-![](tidydata2.jpg)
----
-### Principali funzioni (verbi) per la manipolazione dei dati
-
-
-<!-- ![](verbs.png) -->
+<!-- ![](tidydata2.jpg) -->
+<!-- --- -->
+<!-- ### Principali funzioni (verbi) per la manipolazione dei dati -->
 
 
-## Titanic
-
-I dati contengono 12 variabili: numero di serie del passeggero ( PassengerId ), variabile di sopravvivenza del passeggero binario ( Survived ), classe di passeggeri (PClass ), nome (Name), genere ( , (Sex) età (Age), numero di fratelli e coniugi a bordo ( siblings and spouses on board ), numero di figli / genitori a bordo ( parent children on board ), numero di biglietto ( Tickett ), tariffa pagata (Fare), numero di cabina ( Cabin ) e lugo d'imbarco del passeggero ( Embarked).
+![](figure/verbs.png)
 
 
-# dyplr
+<!-- ## Titanic -->
 
-## Select
-Il comando select() permette di selezionare una o più variabili del dataframe. Per selezionare alcune colonne è sufficiente aggiungere i nomi delle variabili come argomenti di select. L’ordine in cui vengono aggiunti, determinerà l’ordine in cui verranno visualizzati nell’output.
-
-
-## Mutate
-È possibile creare nuove colonne utilizzando quelle del dataframe con la funzione mutate(). Le opzioni utilizzabili all’interno dell’istruzione sono quasi infinite: praticamente tutto ciò che si può fare per i vettori, può essere fatto all’interno della funzione mutate(). Solitamente per una nuova colonna si utilizza un nuovo nome ma se viene utilizzato il nome di una colonna già esistente essa viene sostituita.
+<!-- I dati contengono 12 variabili: numero di serie del passeggero ( PassengerId ), variabile di sopravvivenza del passeggero binario ( Survived ), classe di passeggeri (PClass ), nome (Name), genere ( , (Sex) età (Age), numero di fratelli e coniugi a bordo ( siblings and spouses on board ), numero di figli / genitori a bordo ( parent children on board ), numero di biglietto ( Tickett ), tariffa pagata (Fare), numero di cabina ( Cabin ) e lugo d'imbarco del passeggero ( Embarked). -->
 
 
-## Filter
-In molti casi non si vogliono includere tutte le righe nell’analisi, ma solo una selezione. La funzione filter() riduce le righe/osservazioni in base alle condizioni assegnate, La sintassi generale del filtro è: filter(dataset, condizione). È possibile filtrare le variabili numeriche in base ai rispettivi valori. Gli operatori più utilizzati per questo sono:
+<!-- # dyplr -->
 
-1 > (maggiore)
-
-2 >= (maggiore uguale)
-
-3 < (minore)
-
-4 <= (minore uguale)
-
-5 == (uguale)
-
-6 != (diverso)
-
-Oppure per le variabile categoriche sono utilizzati i segni == o !=. Una o più condizioni possono essere usate contemporaneamente:
-
-filter(iris, Species == "virginica", Sepal.Width > 3.7)
-
-## slice
-La funzione slice() consente di selezionare le righe tramite la loro posizione:
-
-slice(iris,8:12)
-
-## summarize
-La funzione summarize() permette di calcolare funzioni statistiche riassuntive. Per utilizzare la funzione è sufficiente aggiungere il nome nuovo della colonna e, dopo il segno di uguale, la funzione matematica con cui vogliamo riassumere i dati column_name = funzione(variabile). È possibile aggiungere più funzioni di riepilogo all’interno dell’istruzione summarize().
-
-Il codice seguente mostra il calcolo della funzione mean e sd in riferimento alla variabile Sepal.Length:
-
-summarize(iris, mean_sl = mean(Sepal.Length), sd_sl= sd(Sepal.Length ))
-
-La funzione viene utilizzata in successione al comando **group_by()** come verrà spiegato nella sezione split-apply-combine.
-
-## Operatore PIPE: %>%
-
-L’operatore pipe, **%>%** permette di concatenare facilmente una sequenza di funzioni. Quando la pipe è presente tra due funzioni esempio: fun1() %>% fun2() questa sequenza può essere tradotta con esegui fun1() poi, con con output di fun1(), esegui fun2(). Tale comando è mostrato nella sezione successiva in cui group_by() e summarize() sono usati in successione. Per richiamare l’operatore pipe dalla tastiera è possibile utilizzare la shortcut di RStudio: Ctrl + Shift + M (Windows), Cmd + Shift + M (Mac).
+<!-- ## Select -->
+<!-- Il comando select() permette di selezionare una o più variabili del dataframe. Per selezionare alcune colonne è sufficiente aggiungere i nomi delle variabili come argomenti di select. L’ordine in cui vengono aggiunti, determinerà l’ordine in cui verranno visualizzati nell’output. -->
 
 
-## group_by 
-
-Molte delle attività di analisi dati possono essere affrontate utilizzando il paradigma “split-apply-combine”: dividere i dati in gruppi, applicare alcune analisi a ciascun gruppo e combinare i risultati in un nuovo data frame.
-
-Il pacchetto dplyr è stato scritto appositamente per ottimizzare le analisi di tipo Split-Apply-Combine.
-
-![](sac.png)
+<!-- ## Mutate -->
+<!-- È possibile creare nuove colonne utilizzando quelle del dataframe con la funzione mutate(). Le opzioni utilizzabili all’interno dell’istruzione sono quasi infinite: praticamente tutto ciò che si può fare per i vettori, può essere fatto all’interno della funzione mutate(). Solitamente per una nuova colonna si utilizza un nuovo nome ma se viene utilizzato il nome di una colonna già esistente essa viene sostituita. -->
 
 
-La funzione **group_by()** raggruppa i dati utilizzando i livelli di una variabile categorica ed è utilizzata insieme alla funzione summarize per fornire statistiche a riguardo i diversi gruppi. In questo esempio le funzioni sono concatenate con l’operatore %>%:
+<!-- ## Filter -->
+<!-- In molti casi non si vogliono includere tutte le righe nell’analisi, ma solo una selezione. La funzione filter() riduce le righe/osservazioni in base alle condizioni assegnate, La sintassi generale del filtro è: filter(dataset, condizione). È possibile filtrare le variabili numeriche in base ai rispettivi valori. Gli operatori più utilizzati per questo sono: -->
+
+<!-- 1 > (maggiore) -->
+
+<!-- 2 >= (maggiore uguale) -->
+
+<!-- 3 < (minore) -->
+
+<!-- 4 <= (minore uguale) -->
+
+<!-- 5 == (uguale) -->
+
+<!-- 6 != (diverso) -->
+
+<!-- Oppure per le variabile categoriche sono utilizzati i segni == o !=. Una o più condizioni possono essere usate contemporaneamente: -->
+
+<!-- filter(iris, Species == "virginica", Sepal.Width > 3.7) -->
+
+<!-- ## slice -->
+<!-- La funzione slice() consente di selezionare le righe tramite la loro posizione: -->
+
+<!-- slice(iris,8:12) -->
+
+<!-- ## summarize -->
+<!-- La funzione summarize() permette di calcolare funzioni statistiche riassuntive. Per utilizzare la funzione è sufficiente aggiungere il nome nuovo della colonna e, dopo il segno di uguale, la funzione matematica con cui vogliamo riassumere i dati column_name = funzione(variabile). È possibile aggiungere più funzioni di riepilogo all’interno dell’istruzione summarize(). -->
+
+<!-- Il codice seguente mostra il calcolo della funzione mean e sd in riferimento alla variabile Sepal.Length: -->
+
+<!-- summarize(iris, mean_sl = mean(Sepal.Length), sd_sl= sd(Sepal.Length )) -->
+
+<!-- La funzione viene utilizzata in successione al comando **group_by()** come verrà spiegato nella sezione split-apply-combine. -->
+
+<!-- ## Operatore PIPE: %>% -->
+
+<!-- L’operatore pipe, **%>%** permette di concatenare facilmente una sequenza di funzioni. Quando la pipe è presente tra due funzioni esempio: fun1() %>% fun2() questa sequenza può essere tradotta con esegui fun1() poi, con con output di fun1(), esegui fun2(). Tale comando è mostrato nella sezione successiva in cui group_by() e summarize() sono usati in successione. Per richiamare l’operatore pipe dalla tastiera è possibile utilizzare la shortcut di RStudio: Ctrl + Shift + M (Windows), Cmd + Shift + M (Mac). -->
 
 
-## arrange
+<!-- ## group_by  -->
 
-La funzione arrange() ordina le righe in modo crescente. Per ordinare in modo decrescente utilizzare la funzione desc() come mostrato nell’esempio:
+<!-- Molte delle attività di analisi dati possono essere affrontate utilizzando il paradigma “split-apply-combine”: dividere i dati in gruppi, applicare alcune analisi a ciascun gruppo e combinare i risultati in un nuovo data frame. -->
 
+<!-- Il pacchetto dplyr è stato scritto appositamente per ottimizzare le analisi di tipo Split-Apply-Combine. -->
 
-## join
-
-Le funzioni join permettono di unire due tabelle tramite una o più  colonne in comune.  Quando si unisco due tabelle si definisce tabella di sinistra la prima tabella che viene codificata e tabella di destra la seconda. I nomi delle funzioni richiamano i respettivi comandi utilizzati in SQL.
-
-
-left_join() : estrae tutti i valori della tabella a sinistra anche se non hanno corrispondenza nella tabella a destra;
-
-right_join() estrae tutti i valori della tabella a destra anche se non hanno corrispondenza nella tabella di sinistra.
-
-inner_join(): il suo scopo è quello di unire due tabelle restituendo un risultato combinato sulla base di uno o più osservazioni che trovano corrispondenza in tutte le tabelle coinvolte nella join. Il comando corrispondente è
-
-full_join(): estrae tutte le righe delle due tabelle.
+<!-- ![](sac.png) -->
 
 
+<!-- La funzione **group_by()** raggruppa i dati utilizzando i livelli di una variabile categorica ed è utilizzata insieme alla funzione summarize per fornire statistiche a riguardo i diversi gruppi. In questo esempio le funzioni sono concatenate con l’operatore %>%: -->
 
 
----
+<!-- ## arrange -->
 
-## 3° Incontro (16 Giugno)
+<!-- La funzione arrange() ordina le righe in modo crescente. Per ordinare in modo decrescente utilizzare la funzione desc() come mostrato nell’esempio: -->
+
+
+<!-- ## join -->
+
+<!-- Le funzioni join permettono di unire due tabelle tramite una o più  colonne in comune.  Quando si unisco due tabelle si definisce tabella di sinistra la prima tabella che viene codificata e tabella di destra la seconda. I nomi delle funzioni richiamano i respettivi comandi utilizzati in SQL. -->
+
+
+<!-- left_join() : estrae tutti i valori della tabella a sinistra anche se non hanno corrispondenza nella tabella a destra; -->
+
+<!-- right_join() estrae tutti i valori della tabella a destra anche se non hanno corrispondenza nella tabella di sinistra. -->
+
+<!-- inner_join(): il suo scopo è quello di unire due tabelle restituendo un risultato combinato sulla base di uno o più osservazioni che trovano corrispondenza in tutte le tabelle coinvolte nella join. Il comando corrispondente è -->
+
+<!-- full_join(): estrae tutte le righe delle due tabelle. -->
+
+
+
+
+<!-- --- -->
+
+
 
 ### Visualizzazione dei dati con ggplot2
 
-![](ggplot2.png)
+![](figure/ggplot2.png)
 
-## 4° Incontro (20 Giugno)
+## 3° Incontro  
 
 ### Statistica con R
 
 **I test statistici sono modelli lineari**
 
-![](pic1.png)
+![](figure/pic1.png)
 
-## 5° Incontro (30 Giugno)
 
 ### Riproducibilità della ricerca con R
 
 -   reportistica con rmarkdown;
 -   controllo versioni e lavoro collaborativo con GIT
 
-![](rmark.png)
+![](figure/rmark.png)

@@ -1,8 +1,8 @@
 ---
 title: "R workflow"
-subtitle: "Corso introduttivo a R"
-output: powerpoint_presentation
-
+subtitle: Corso introduttivo a R
+output:
+  powerpoint_presentation: default
 ---
 
 # Inizializzare un R project
@@ -36,7 +36,7 @@ output: powerpoint_presentation
 
 
 
-## Organizzare le cartelle del progetto
+# Organizzare le cartelle del progetto
 
 1 usare la funzione rproj() per creare le  seguenti cartelle:
 
@@ -46,13 +46,13 @@ library(fs)
 dir_tree(path = "C:/Users/vito.tranquillo/Desktop/Git Projects/ProgettoR", recurse = TRUE)
 ```
 
-## Organizzare le cartelle del progetto
+# Organizzare le cartelle del progetto
 
  - R (qui si inseriscono i codici di R, la cartella contiene il file codiciOF.R e il file librerie.R). Il primo file si usa per scrivere lo script di R mentre nel secondo file c'è l'elenco delle librerie che devono essere caricate oltre e quelle che si caricano con la funzione pkg()
  - dati (qui si inseriscono i dati nei vari formati)
  - report (qui si inseriscono i file rmd per scirvere report, la cartella contiene già un file notebook.rmd per la scrittura di un report usando la funzioanlità notebook di rmarkdown)
 
-## Organizzare le cartelle del progetto
+# Organizzare le cartelle del progetto
 
 usare la funzione pkg() per caricare le seguenti librerie:
  
@@ -66,44 +66,43 @@ usare la funzione pkg() per caricare le seguenti librerie:
 
 # tidyverse
 
-## Manipolare, analizzare e comunicare con il paradigma Tidyverse
 
 ![](figure/tidy.png)
 
-## i dati devono essere tidy 
+# i dati devono essere tidy 
 
 ![](figure/tidydata1.jpg)
 
-## pivot_wider()
+# pivot_wider()
 
 ![](figure/pivotwider.png)
 
-## pivot_longer()
+# pivot_longer()
 
 ![](figure/pivotlonger.png)
 
 
 
-## pachetto dyplr 
+# pachetto dyplr 
 
 
 ![](figure/verbs.png)
 
-## Split-Apply-Combine : group_by()
+# Split-Apply-Combine : group_by()
 
 ![](figure/sac.png)
 
-## pipe %>% 
+# pipe %>% 
 
 ![](figure/data_recipe.png)
 
-## grafici con ggplot2
+# grafici con ggplot2
 
 ![](figure/ggplot5.png)
 
 # Statistica con R
 
-## statistical significant:don't say it and don't use it 
+# statistical significant:don't say it and don't use it 
 
 ![](figure/pic1.png)
 
