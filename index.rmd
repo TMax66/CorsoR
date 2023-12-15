@@ -8,7 +8,7 @@ author: "[Massimo Tranquillo](https://github.com/TMax66)"
 # github: "holtzy"
 #home: "www.yan-holtz.com"
 # !!! You need to provide a logo image here !!! Or just delete the field for no logo
-logo: "logo_gallery.png"
+logo: "figure/izsler.png"
 output:
   epuRate::epurate:
     toc: TRUE
@@ -98,7 +98,7 @@ rproj <- function(){
                "library(readxl)"), fileConn2)
   close(fileConn2)
   
-  fileConn3 <- file(here("R", "codiciOF.R"))
+  fileConn3 <- file(here("R", "codici.R"))
   writeLines(c("source(here('R', 'librerie.R'))"), fileConn3)
   close(fileConn3)
   
@@ -173,9 +173,9 @@ Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal 
 
 ## 2° Incontro
 
-## Gestione, manipolazione dei dati (data wrangling)
+### Gestione, manipolazione dei dati (data wrangling)
 
-### Introduzione al Tidyverse:
+#### Introduzione al Tidyverse:
 
 
 ![](figure/tidy.png)
@@ -294,7 +294,9 @@ Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal 
 
 
 
-### Visualizzazione dei dati con ggplot2
+### Visualizzazione dei dati
+
+#### ggplot2
 
 ![](figure/ggplot2.png)
 
