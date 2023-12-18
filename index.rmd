@@ -122,8 +122,10 @@ A questo punto avete creato un contenitore vuoto che ospiterà in seguito i file
 
 ## Clonare il progetto dal repository di GitHub nel PC locale
 
-Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizzo web che dovrebbe avere questa forma: https://github.com/Utente/Progetto.
+Copiate dalla barra degli indirizzi della pagina del nuovo repository l'indirizzo web che dovrebbe avere questa forma:  
 
+https&#58;//github.com/Utente/Progetto.
+ 
 
 <!-- [**https://github.com/Utente/Progetto**](https://github.com/Utente/Progetto){.uri}.  -->
 
