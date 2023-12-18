@@ -193,7 +193,7 @@ Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal 
 <!-- **Tidy data** -->
 <!-- I dati ordinati sono un modo per descrivere i dati organizzati con una particolare struttura – una struttura rettangolare, in cui ogni variabile ha la propria colonna, e ogni osservazione ha la sua riga ( Wickham 2014 ). -->
 
-![](tidydata1.jpg)
+<!-- ![](figure/tidydata1.jpg) -->
 <!-- Questa struttura standard di dati ordinati ha portato Hadley Wickham a descriverlo nel modo in cui Leo Tolstoy descrive le famiglie. Leo dice “ Le famiglie felici sono tutte uguali; ogni famiglia infelice è infelice a modo suo ”. Allo stesso modo, Hadley afferma che “ i set di dati ordinati sono tutti uguali, ma ogni set di dati disordinato è a suo modo disordinato ”. -->
 
 <!-- ![](tidydata2.jpg) -->
@@ -293,14 +293,21 @@ Aprite RStudio e create un nuvo progetto utilizzando il comando New Project dal 
 <!-- --- -->
 
 
+## 3° Incontro
 
 ### Visualizzazione dei dati
 
-#### ggplot2
+#### grafici - ggplot2
 
 ![](figure/ggplot2.png)
 
-## 3° Incontro  
+#### tabelle - gt, flextable
+![](figure/gt.png)
+![](figure/flextable1.png)
+![](figure/flextable2.png)
+
+
+## 4° Incontro  
 
 ### Statistica con R
 
